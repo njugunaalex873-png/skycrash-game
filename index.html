@@ -334,10 +334,11 @@ h3 {
 }
 
 #cashout {
-  background: #d87900;
-  color: white;
-  border: 2px solid #ffb24d;
+  background: #ffd400;
+  color: #111827;
+  border: 2px solid #fff06a;
 }
+  
 
 #cashout:disabled {
   opacity: 0.5;
@@ -642,6 +643,62 @@ h3 {
     height: 68px;
     min-height: 68px;
   }
+}
+  
+  
+/* Make both betting panels exactly the same width */
+#secondBettingCard,
+.betting-card:not(#secondBettingCard) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px;
+  margin: 0 0 14px;
+}
+
+/* Keep the inside layout identical */
+.betting-card .bet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prevent controls from stretching the box */
+.betting-card .bet-settings,
+.betting-card .bet-actions {
+  min-width: 0;
+  width: 100%;
+}
+
+.betting-card .amount-control,
+.betting-card .quick-bets,
+.betting-card .bet-actions button {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Match both panels on narrow phones */
+@media (max-width: 360px) {
+  .betting-card,
+  #secondBettingCard {
+    padding: 8px;
+  }
+
+  .betting-card .bet-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 6px;
+  }
+  }
+  
+#cashout,
+#cashout2 {
+  background: #ffd400;
+  color: #111827;
+  border: 2px solid #fff06a;
 }
   
   
