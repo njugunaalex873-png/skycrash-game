@@ -965,15 +965,16 @@ function saveGame() {
   } catch (error) {}
 }
 
+
 function loadGame() {
+  // Refill the demo balance to 50,000 on every page refresh.
+  balance = 50000;
+
+  // Keep the existing game history if it was saved.
   try {
     const data = JSON.parse(
       localStorage.getItem("skycrash-demo") || "{}"
     );
-
-    if (Number.isFinite(data.balance) && data.balance >= 0) {
-      balance = data.balance;
-    }
 
     if (Array.isArray(data.history)) {
       history = data.history
@@ -984,8 +985,9 @@ function loadGame() {
 
   updateBalance();
   renderHistory();
+  saveGame();
 }
-
+  
 function renderHistory() {
   const box = $("history");
   box.innerHTML = "";
