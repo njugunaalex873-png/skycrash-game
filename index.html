@@ -1357,7 +1357,8 @@ formatKSh(amount);
 
   setControls();
   }
-  const SKYCRASH_API = "https://skycrash-predictor.onrender.com";
+  
+const SKYCRASH_API = "https://skycrash-predictor.onrender.com";
 
 async function getServerGameStatus() {
   const response = await fetch(
@@ -1371,6 +1372,7 @@ async function getServerGameStatus() {
 
   return await response.json();
 }
+
 async function getServerGameMultiplier() {
   const response = await fetch(
     `${SKYCRASH_API}/api/game-multiplier`,
@@ -1382,8 +1384,9 @@ async function getServerGameMultiplier() {
   }
 
   return await response.json();
-  }
-  async function startServerGameRound() {
+}
+
+async function startServerGameRound() {
   const response = await fetch(
     `${SKYCRASH_API}/api/game-start`,
     {
@@ -1402,6 +1405,9 @@ async function getServerGameMultiplier() {
       data.error || "Could not start the server round."
     );
   }
+
+  return data;
+}
 
   async function startRound() {
   if (phase !== "ready") return;
