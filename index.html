@@ -1045,7 +1045,18 @@ function setControls() {
   const ready = phase === "ready";
 
   // PANEL 1
-  $("play").disabled = !ready || bet1Placed;
+  $("play").disabled = !ready;
+
+$("play").className =
+  bet1Placed && ready ? "red-button" : "green-button";
+
+$("playLabel").textContent =
+  bet1Placed && ready ? "CANCEL BET" : "BET";
+
+$("betDisplay").textContent =
+  bet1Placed && ready
+    ? "Refund " + betAmount.toLocaleString() + " coins"
+    : (Number($("bet").value) || 0).toLocaleString() + " coins";
   $("bet").disabled = !ready || bet1Placed;
   $("decreaseBet").disabled = !ready || bet1Placed;
   $("increaseBet").disabled = !ready || bet1Placed;
@@ -1070,7 +1081,18 @@ function setControls() {
   }
 
   // PANEL 2
-  $("play2").disabled = !ready || bet2Placed;
+  $("play2").disabled = !ready;
+
+$("play2").className =
+  bet2Placed && ready ? "red-button" : "green-button";
+
+$("play2").querySelector("span").textContent =
+  bet2Placed && ready ? "CANCEL BET 2" : "BET 2";
+
+$("play2Display").textContent =
+  bet2Placed && ready
+    ? "Refund " + bet2Amount.toLocaleString() + " coins"
+    : (Number($("bet2").value) || 0).toLocaleString() + " coins";
   $("bet2").disabled = !ready || bet2Placed;
   $("decreaseBet2").disabled = !ready || bet2Placed;
   $("increaseBet2").disabled = !ready || bet2Placed;
@@ -1112,6 +1134,28 @@ function resetFlight() {
   $("multiplier").style.color = "white";
   $("multiplier").textContent = "1.00x";
 }
+  function cancelBet() {
+  if (phase !== "ready" || !bet1Placed) return;
+
+  balance += betAmount;
+  betAmount = 0;
+  bet1Placed = false;
+  cashedOut = false;
+
+  updateBalance();
+  saveGame();
+
+  $("result").textContent = "Bet 1 cancelled. Your coins have been refunded.";
+  $("result").style.color = "var(--green)";
+
+  if (!bet2Placed && bettingCountdownTimer !== null) {
+    clearInterval(bettingCountdownTimer);
+    bettingCountdownTimer = null;
+    $("status").textContent = "Waiting for bets";
+  }
+
+  setControls();
+  }
 
 function placeBet() {
   if (phase !== "ready" || bet1Placed) return;
@@ -1176,6 +1220,35 @@ function placeBet2() {
 
   setControls();
   startBettingCountdown();
+  }
+  function cancelBet2() {
+  if (phase !== "ready" || !bet2Placed) return;
+
+  balance += bet2Amount;
+  bet2Amount = 0;
+  bet2Placed = false;
+  cashedOut2 = false;
+
+  updateBalance();
+  saveGame();
+
+  $("bet2Status").textContent =
+    "Bet 2 cancelled. Your coins have been refunded.";
+
+  $("bet2Payout").textContent = "0 coins";
+
+  $("result").textContent =
+    "Bet 2 cancelled. Your coins have been refunded.";
+
+  $("result").style.color = "var(--green)";
+
+  if (!bet1Placed && bettingCountdownTimer !== null) {
+    clearInterval(bettingCountdownTimer);
+    bettingCountdownTimer = null;
+    $("status").textContent = "Waiting for bets";
+  }
+
+  setControls();
   }
 
 function startRound() {
@@ -1252,7 +1325,7 @@ function tick(now) {
   if (phase !== "running") return;
 
   const elapsed = (now - roundStartedAt) / 1000;
-  multiplier = Math.exp(elapsed * 0.22);
+  multiplier = Math.exp(elapsed * 0.12);
 
   $("multiplier").textContent =
     multiplier.toFixed(2) + "x";
@@ -1543,10 +1616,22 @@ $("autoTab").onclick = () => {
 };
 
 // GAME BUTTONS
-$("play").onclick = placeBet;
+$("play").onclick = () => {
+  if (phase === "ready" && bet1Placed) {
+    cancelBet();
+  } else {
+    placeBet();
+  }
+};
 $("cashout").onclick = cashOut;
 
-$("play2").onclick = placeBet2;
+$("play2").onclick = () => {
+  if (phase === "ready" && bet2Placed) {
+    cancelBet2();
+  } else {
+    placeBet2();
+  }
+};
 $("cashout2").onclick = cashOut2;
 
 // AUTO BET: Panel 1 only
