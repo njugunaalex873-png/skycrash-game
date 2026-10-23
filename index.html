@@ -973,9 +973,12 @@ let nextRoundTimer = null;
 let winTimer1 = null;
 let winTimer2 = null;
 
+function formatKSh(amount) {
+return "KSh " + Math.floor(amount).toLocaleString("en-KE");
+}
+
 function updateBalance() {
-  $("balance").textContent =
-    Math.floor(balance).toLocaleString();
+$("balance").textContent = formatKSh(balance);
 }
 function resetCoins() {
 balance = 50000;
@@ -1547,7 +1550,7 @@ function cashOut() {
 
   $("cashoutLabel").textContent = "CASHED OUT";
   $("cashoutValue").textContent =
-    payout.toLocaleString() + " coins";
+    formatKSh(payout)
 
   $("result").textContent =
     "Bet 1 cashed out at " + multiplier.toFixed(2) +
