@@ -459,18 +459,43 @@ h3 {
   color: white;
   border: 2px solid #83f76c;
 }
+  
+/* Keep both win notifications visible without overlapping */
+#win-notification {
+  top: max(12px, env(safe-area-inset-top));
+}
+
+#win-notification-2 {
+  top: calc(max(12px, env(safe-area-inset-top)) + 82px);
+}
+  
 </style>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <!-- CASH-OUT WIN NOTIFICATION -->
+
+<!-- PANEL 1 WIN NOTIFICATION -->
 <div id="win-notification" class="win-notification" hidden>
   <div class="win-message">
     <span id="win-title">You have cashed out!</span>
     <strong id="win-multiplier">1.00x</strong>
   </div>
-  <!-- PANEL 2 WIN NOTIFICATION -->
+
+  <div class="win-amount">
+    <span>★ BET 1 WIN ★</span>
+    <strong id="win-payout">0 coins</strong>
+  </div>
+
+  <button
+    type="button"
+    class="close-win-notification"
+    onclick="document.getElementById('win-notification').hidden = true"
+    aria-label="Close Bet 1 notification"
+  >×</button>
+</div>
+
+<!-- PANEL 2 WIN NOTIFICATION -->
 <div id="win-notification-2" class="win-notification" hidden>
   <div class="win-message">
     <span id="win-title-2">Bet 2 cashed out!</span>
@@ -481,16 +506,15 @@ h3 {
     <span>★ BET 2 WIN ★</span>
     <strong id="win-payout-2">0 coins</strong>
   </div>
+
+  <button
+    type="button"
+    class="close-win-notification"
+    onclick="document.getElementById('win-notification-2').hidden = true"
+    aria-label="Close Bet 2 notification"
+  >×</button>
 </div>
-
-  <div class="win-amount">
-    <span>★ Win KES ★</span>
-    <strong id="win-payout">10.00</strong>
-  </div>
-
-
-</div>
-
+  
 <header>
   <div class="logo">✈ SkyCrash</div>
   <div class="wallet">
