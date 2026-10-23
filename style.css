@@ -1,15 +1,18 @@
+/* ==========================================
+   SKYCRASH — MOBILE CRASH-GAME DESIGN
+   ========================================== */
+
 :root {
-  --bg: #090b14;
-  --panel: #121626;
-  --panel-light: #191f33;
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #f7f8ff;
-  --muted: #8e96b5;
-  --red: #ff365e;
-  --red-dark: #c91d48;
-  --purple: #a855f7;
-  --green: #20df9f;
-  --gold: #ffd166;
+  --bg: #0b0b0c;
+  --panel: #1b1b1d;
+  --panel-dark: #111113;
+  --border: #29292c;
+  --text: #f5f5f7;
+  --muted: #a0a0a5;
+  --green: #25aa08;
+  --green-bright: #35d719;
+  --red: #e6002e;
+  --blue: #49a9ed;
 }
 
 * {
@@ -23,644 +26,469 @@ html {
 
 body {
   margin: 0;
+  padding: 0 0 30px;
   min-height: 100vh;
-  padding: 16px 12px 28px;
-  color: var(--text);
-  background:
-    radial-gradient(
-      ellipse at 50% 0%,
-      rgba(110, 46, 160, 0.18),
-      transparent 48%
-    ),
-    var(--bg);
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-}
-
-button,
-input,
-select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-  transition:
-    transform 0.15s ease,
-    filter 0.15s ease,
-    opacity 0.15s ease;
-}
-
-button:active {
-  transform: scale(0.97);
-}
-
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
-header,
-.topbar,
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 0 auto 18px;
-  max-width: 520px;
-}
-
-h1,
-h2,
-h3,
-p {
-  margin-top: 0;
-}
-
-h1 {
-  margin-bottom: 3px;
-  font-size: 25px;
-  font-weight: 900;
-  letter-spacing: -1px;
-}
-
-h1 span,
-.logo-accent {
-  color: var(--red);
-}
-
-.subtitle {
-  margin: 0;
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.wallet,
-.balance-card {
-  padding: 10px 14px;
-  min-width: 115px;
-  border: 1px solid rgba(32, 223, 159, 0.22);
-  border-radius: 14px;
-  background: rgba(32, 223, 159, 0.07);
-  text-align: right;
-}
-
-.wallet-label,
-.balance-label {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.wallet-value,
-.balance-value {
-  color: var(--green);
-  font-size: 19px;
-  font-weight: 900;
-}
-
-main,
-.container,
-.game-container {
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-.game-area,
-.flight-area,
-#game-area {
-  position: relative;
-  min-height: 285px;
-  overflow: hidden;
-  border: 1px solid rgba(168, 85, 247, 0.24);
-  border-radius: 23px;
-  background:
-    radial-gradient(
-      ellipse at 50% 85%,
-      rgba(168, 85, 247, 0.16),
-      transparent 52%
-    ),
-    linear-gradient(155deg, #171a30, #0c0f1c 65%);
-  box-shadow:
-    0 18px 45px rgba(0, 0, 0, 0.24),
-    inset 0 1px rgba(255, 255, 255, 0.04);
-}
-
-.game-area::before,
-.flight-area::before,
-#game-area::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-  background-size: 30px 30px;
-  mask-image: linear-gradient(to top, black, transparent 90%);
-}
-
-.multiplier,
-#multiplier {
-  position: relative;
-  z-index: 2;
-  margin: 58px 0 4px;
-  color: var(--red);
-  font-size: clamp(48px, 13vw, 76px);
-  font-weight: 950;
-  letter-spacing: -3px;
-  line-height: 1.1;
-  text-align: center;
-  text-shadow: 0 0 30px rgba(255, 54, 94, 0.28);
-}
-
-.game-status,
-.status,
-#status {
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.plane,
-#plane {
-  position: relative;
-  z-index: 2;
-  display: block;
-  margin: 20px auto 0;
-  font-size: 48px;
-  text-align: center;
-  filter: drop-shadow(0 0 16px rgba(255, 54, 94, 0.4));
-}
-
-.history,
-.history-list,
-#history {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 12px 0;
-}
-
-.history-item,
-.history span,
-#history span {
-  padding: 7px 10px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: var(--panel);
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.card,
-.bet-panel,
-.controls,
-.game-controls {
-  margin-top: 14px;
-  padding: 17px;
-  border: 1px solid var(--border);
-  border-radius: 19px;
-  background: linear-gradient(
-    145deg,
-    rgba(25, 31, 51, 0.96),
-    rgba(18, 22, 38, 0.96)
-  );
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-input,
-select {
-  width: 100%;
-  min-height: 46px;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  outline: none;
-  background: #0c1020;
-  color: var(--text);
-}
-
-input:focus,
-select:focus {
-  border-color: var(--purple);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
-}
-
-button,
-.btn {
-  min-height: 46px;
-  padding: 12px 16px;
-  border: 0;
-  border-radius: 12px;
-  color: white;
-  font-weight: 850;
-}
-
-.primary-button,
-#start-button,
-#bet-button {
-  background: linear-gradient(135deg, #ff426b, #dc1747);
-  box-shadow: 0 7px 20px rgba(255, 54, 94, 0.18);
-}
-
-.cashout-button,
-#cashout-button {
-  background: linear-gradient(135deg, #22e6a4, #0ca977);
-  color: #06170f;
-  box-shadow: 0 7px 20px rgba(32, 223, 159, 0.13);
-}
-
-.secondary-button {
-  border: 1px solid var(--border);
-  background: var(--panel-light);
-}
-
-.button-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.button-row button {
-  width: 100%;
-}
-
-.options-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.options-row label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-.options-row input[type="checkbox"] {
-  width: 18px;
-  min-height: 18px;
-  accent-color: var(--purple);
-}
-
-.section-title {
-  margin-bottom: 12px;
-  font-size: 14px;
-  font-weight: 900;
-}
-
-.notice {
-  margin: 14px auto 0;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.6;
-  text-align: center;
-}
-
-@media (max-width: 380px) {
-  body {
-    padding-right: 9px;
-    padding-left: 9px;
-  }
-
-  .game-area,
-  .flight-area,
-  #game-area {
-    min-height: 255px;
-  }
-
-  .card,
-  .bet-panel,
-  .controls,
-  .game-controls {
-    padding: 13px;
-  }
-  }
-/* ==========================================
-   SKYCRASH — DARK CRASH-GAME THEME
-   ========================================== */
-
-:root {
-  --bg: #0b0b0b;
-  --panel: #1b1b1d;
-  --panel-inner: #111113;
-  --text: #f5f5f5;
-  --muted: #9b9b9f;
-  --red: #e6002e;
-  --green: #22a900;
-  --border: #29292c;
-}
-
-html,
-body {
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
-  margin: 0;
-  padding: 12px 8px 30px;
+/* ==========================================
+   HEADER AND VIRTUAL WALLET
+   ========================================== */
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 76px;
+  padding: 12px 16px;
+  background: #1b1b1d;
+  border-bottom: 1px solid #252527;
 }
 
-button,
-input,
-select {
-  font-family: inherit;
+.logo {
+  color: #ffffff;
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: -0.7px;
+  white-space: nowrap;
 }
 
-button {
-  cursor: pointer;
-  font-weight: 600;
+.wallet {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  background: transparent;
+  color: #29bd19;
+  font-size: 19px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
-/* Main game layout */
+#balance {
+  color: #29bd19;
+}
 
-main,
-.container,
-.game-container {
+/* ==========================================
+   MAIN PAGE
+   ========================================== */
+
+main {
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
+  padding: 12px 8px 20px;
 }
 
-/* Wallet */
-
-.wallet,
-.balance-card {
-  background: #1b1b1d;
-  border-radius: 8px;
-  padding: 12px;
+.card {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 14px;
+  border: 0;
+  border-radius: 27px;
+  background: var(--panel);
+  box-shadow: none;
 }
 
-.wallet-value,
-.balance-value {
-  color: #29bd19;
-  font-size: 22px;
-  font-weight: 800;
+.label {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-/* Recent multiplier history */
+/* Hide the small arena heading for a cleaner layout */
 
-.history,
-.history-list,
-#history {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 15px;
-  overflow-x: auto;
-  padding: 12px 4px;
-  scrollbar-width: none;
-}
-
-.history::-webkit-scrollbar,
-.history-list::-webkit-scrollbar,
-#history::-webkit-scrollbar {
+.card:first-child > .label {
   display: none;
 }
 
-.history-item,
-.history span,
-#history span {
-  flex: 0 0 auto;
-  padding: 4px 0;
-  border: 0;
-  background: transparent;
-  color: #4ba9e9;
-  font-size: 16px;
-  font-weight: 500;
-}
+/* ==========================================
+   FLIGHT ARENA
+   ========================================== */
 
-/* Flight area */
-
-#game,
-.game-area,
-.flight-area,
-#game-area {
+#game {
   position: relative;
-  height: 350px;
-  min-height: 240px;
+  width: 100%;
+  height: clamp(300px, 55vw, 390px);
+  min-height: 250px;
   overflow: hidden;
   border: 2px solid #292929;
   border-radius: 34px;
   background:
     repeating-conic-gradient(
       from 250deg at 0% 100%,
-      #080808 0deg 8deg,
-      #151515 8deg 16deg
+      #050505 0deg 8deg,
+      #111111 8deg 16deg
     );
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+}
+
+/* Subtle arena texture */
+
+#game::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    );
+  background-size: 34px 34px;
 }
 
 /* Multiplier */
 
-#multiplier,
-.multiplier {
-  position: relative;
-  z-index: 1;
-  margin: 12px 0;
+#multiplier {
+  position: absolute;
+  z-index: 2;
+  top: 32%;
+  left: 0;
+  width: 100%;
+  padding: 0 4px;
   color: var(--red);
-  font-size: clamp(54px, 13vw, 100px);
+  font-size: clamp(54px, 13vw, 88px);
   font-weight: 900;
-  letter-spacing: 1px;
-  line-height: 1.05;
-  text-shadow: none;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
-/* Game status */
+/* Flight status */
 
-#status,
-.status,
-.game-status {
-  position: relative;
-  z-index: 1;
-  color: white;
-  font-size: clamp(18px, 5vw, 36px);
+#status {
+  position: absolute;
+  z-index: 2;
+  top: 18%;
+  left: 0;
+  width: 100%;
+  padding: 0 8px;
+  color: #ffffff;
+  font-size: clamp(18px, 4.5vw, 36px);
   font-weight: 500;
-  text-transform: uppercase;
   text-align: center;
 }
 
 /* Plane */
 
-#plane,
-.plane {
-  font-size: 42px;
-  filter: none;
+#plane {
+  position: absolute;
+  z-index: 3;
+  left: 8%;
+  bottom: 20px;
+  font-size: 36px;
+  transition: filter 0.2s ease;
+  filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.2));
 }
 
-/* Betting panels */
+/* Flight trail */
 
-.card,
-.bet-panel,
-.controls,
-.game-controls {
-  margin-top: 10px;
-  padding: 15px;
-  border: 0;
-  border-radius: 30px;
-  background: var(--panel);
-  box-shadow: none;
+#trail {
+  position: absolute;
+  z-index: 1;
+  left: 8%;
+  bottom: 40px;
+  height: 3px;
+  width: 0;
+  background: #e9e9e9;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+/* Result message */
+
+.result {
+  min-height: 24px;
+  margin-top: 12px;
+  padding: 2px 3px;
+  color: var(--green-bright);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   BETTING PANEL
+   ========================================== */
+
+.card h3 {
+  margin: 0 0 14px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* Two-column controls */
+
+.controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+/* Labels */
+
+.controls .label {
+  min-height: 14px;
+  margin-bottom: 7px;
+  font-size: 10px;
 }
 
 /* Inputs */
 
 input,
-select {
-  min-height: 45px;
-  padding: 10px 12px;
-  border: 1px solid #303034;
-  border-radius: 24px;
-  background: var(--panel-inner);
-  color: white;
-  font-size: 16px;
+button {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
 }
 
-input:focus,
-select:focus {
-  outline: 2px solid #555;
-  box-shadow: none;
+input {
+  display: block;
+  margin: 0;
+  border: 1px solid #303034;
+  outline: none;
+  background: var(--panel-dark);
+  color: #ffffff;
+}
+
+input:focus {
+  border-color: #777777;
+}
+
+input:disabled {
+  opacity: 0.6;
 }
 
 /* Buttons */
 
-button,
-.btn {
-  min-height: 46px;
-  border: 0;
-  border-radius: 15px;
-  padding: 12px 16px;
-  color: white;
+button {
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    filter 0.15s ease,
+    transform 0.15s ease,
+    opacity 0.15s ease;
 }
 
-#bet-button,
-#start-button,
-.primary-button {
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Bet button */
+
+.green-button {
+  min-height: 105px;
+  border: 2px solid #8de879;
+  border-radius: 23px;
   background: var(--green);
-  color: white;
-  border: 2px solid #83e66c;
-  border-radius: 24px;
-  font-size: 21px;
-  box-shadow: none;
+  color: #ffffff;
+  font-size: clamp(17px, 4vw, 23px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-#cashout-button,
-.cashout-button {
-  background: #f4c900;
-  color: #111;
-  border-radius: 24px;
+/* Cash-out button */
+
+.red-button {
+  min-height: 105px;
+  border: 2px solid #ff758d;
+  border-radius: 23px;
+  background: #d7193f;
+  color: #ffffff;
+  font-size: clamp(15px, 3.8vw, 21px);
 }
 
-/* Two-column control rows */
+/* ==========================================
+   AUTO OPTIONS
+   ========================================== */
 
-.button-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.button-row button {
-  width: 100%;
-}
-
-/* Quick bet controls */
-
-.options-row {
+.options {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
-.options-row button {
-  background: #111113;
-  border-radius: 24px;
+.options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
 }
 
-/* Bottom sections */
+.options input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  min-height: 17px;
+  padding: 0;
+  accent-color: var(--green);
+}
 
-.section-title {
-  color: white;
+/* ==========================================
+   CRASH HISTORY
+   ========================================== */
+
+.history {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  scrollbar-width: none;
+}
+
+.history::-webkit-scrollbar {
+  display: none;
+}
+
+.history-item {
+  flex: 0 0 auto;
+  padding: 3px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--blue);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
-.notice {
-  color: #a0a0a0;
-  text-align: center;
+.history-item.low {
+  color: #4da7e5;
+}
+
+.history-item.high {
+  color: #a86bff;
+}
+
+/* ==========================================
+   INFORMATION AND FOOTER
+   ========================================== */
+
+.note {
+  margin: 10px 0 0;
+  color: var(--muted);
   font-size: 11px;
-  line-height: 1.5;
+  line-height: 1.7;
+  text-align: center;
 }
 
-/* Small phone screens */
+h3 {
+  margin-top: 0;
+}
+
+/* ==========================================
+   MOBILE LAYOUT
+   ========================================== */
 
 @media (max-width: 400px) {
-  body {
-    padding: 8px 5px 24px;
+  main {
+    padding: 8px 5px 18px;
   }
 
-  #game,
-  .game-area,
-  .flight-area,
-  #game-area {
-    height: 280px;
-    min-height: 240px;
-    border-radius: 28px;
+  header {
+    min-height: 70px;
+    padding: 10px;
   }
 
-  .card,
-  .bet-panel,
-  .controls,
-  .game-controls {
+  .logo {
+    font-size: 20px;
+  }
+
+  .wallet {
+    padding: 7px 5px;
+    font-size: 17px;
+  }
+
+  .card {
     padding: 12px;
-    border-radius: 26px;
+    border-radius: 25px;
   }
 
-  #multiplier,
-  .multiplier {
+  #game {
+    height: 300px;
+    min-height: 240px;
+    border-radius: 29px;
+  }
+
+  #multiplier {
     font-size: 58px;
   }
 
-  #bet-button,
-  #start-button,
-  .primary-button {
-    font-size: 18px;
+  #status {
+    font-size: 21px;
+  }
+
+  .controls {
+    gap: 8px;
+  }
+
+  .controls input {
+    padding: 10px 7px;
+    font-size: 14px;
+  }
+
+  .green-button,
+  .red-button {
+    min-height: 94px;
+    padding: 8px 5px;
+    font-size: 16px;
+  }
+
+  .history {
+    gap: 14px;
   }
 }
+
+@media (max-width: 320px) {
+  .logo {
+    font-size: 18px;
+  }
+
+  .wallet {
+    font-size: 15px;
+  }
+
+  #game {
+    height: 250px;
+  }
+
+  #multiplier {
+    font-size: 48px;
+  }
+
+  .controls {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  }
