@@ -274,44 +274,58 @@ h3 {
   </div>
 </section>
 
-<section class="card">
-  <h3>🎮 Place Your Bet</h3>
-
-  <div class="controls">
-    <div>
-      <div class="label">BET AMOUNT</div>
-      <input id="bet" type="number"
-        value="50" min="1" step="1">
-    </div>
-
-    <div>
-      <div class="label">AUTO CASH-OUT</div>
-      <input id="autoTarget" type="number"
-        value="2" min="1.01" step="0.01">
-    </div>
-
-    <button id="play" class="green-button">
-      PLACE BET
+<section class="card betting-card">
+  <div class="bet-tabs">
+    <button type="button" class="bet-tab active" id="manualTab">
+      Bet
     </button>
-
-    <button id="cashout" class="red-button" disabled>
-      CASH OUT
+    <button type="button" class="bet-tab" id="autoTab">
+      Auto
     </button>
   </div>
 
-  <div class="options">
-    <label>
-      <input id="autoBet" type="checkbox">
-      Auto Bet
-    </label>
+  <div class="bet-layout">
+    <div class="bet-settings">
+      <label class="amount-control">
+        <button type="button" id="decreaseBet" aria-label="Decrease bet">−</button>
+        <input id="bet" type="number" value="50" min="1" step="1" aria-label="Virtual bet amount">
+        <button type="button" id="increaseBet" aria-label="Increase bet">+</button>
+      </label>
 
-    <label>
-      <input id="autoCash" type="checkbox">
-      Auto Cash-Out
-    </label>
+      <div class="quick-bets">
+        <button type="button" data-bet="100">100</button>
+        <button type="button" data-bet="250">250</button>
+        <button type="button" data-bet="1000">1,000</button>
+        <button type="button" data-bet="25000">25,000</button>
+      </div>
+
+      <div class="auto-settings" id="autoSettings" hidden>
+        <label for="autoTarget">Auto cash-out multiplier</label>
+        <input id="autoTarget" type="number" value="2" min="1.01" step="0.01">
+        <label class="auto-check">
+          <input id="autoBet" type="checkbox">
+          Enable Auto Bet
+        </label>
+        <label class="auto-check">
+          <input id="autoCash" type="checkbox">
+          Enable Auto Cash-Out
+        </label>
+      </div>
+    </div>
+
+    <div class="bet-actions">
+      <button id="play" class="green-button" type="button">
+        <span id="playLabel">Bet</span>
+        <strong id="betDisplay">50 coins</strong>
+      </button>
+
+      <button id="cashout" class="red-button" type="button" disabled>
+        CASH OUT
+      </button>
+    </div>
   </div>
 
-  <p class="note">Demo game. Virtual coins only.</p>
+  <p class="note">Demo game · Virtual coins only</p>
 </section>
 
 <section class="card">
