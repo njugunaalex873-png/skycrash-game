@@ -580,6 +580,71 @@ h3 {
   }
   }
   
+/* Make Panel 1 and Panel 2 betting boxes equal */
+.betting-card .bet-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+/* Equal-sized stake input boxes */
+.betting-card .amount-control {
+  width: 100%;
+  height: 42px;
+  display: flex;
+  align-items: center;
+}
+
+.betting-card .amount-control input {
+  flex: 1;
+  min-width: 0;
+  width: 0;
+  height: 32px;
+  text-align: center;
+}
+
+/* Equal-sized quick-bet boxes */
+.betting-card .quick-bets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.betting-card .quick-bets button {
+  width: 100%;
+  height: 38px;
+  min-width: 0;
+}
+
+/* Equal-sized BET and CASH OUT boxes */
+.betting-card .bet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.betting-card .bet-actions button {
+  width: 100%;
+  height: 74px;
+  min-height: 74px;
+  margin: 0;
+}
+
+/* Keep the boxes equal on small Android screens */
+@media (max-width: 360px) {
+  .betting-card .bet-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .betting-card .bet-actions button {
+    height: 68px;
+    min-height: 68px;
+  }
+}
+  
+  
 </style>
   <link rel="stylesheet" href="style.css">
 </head>
