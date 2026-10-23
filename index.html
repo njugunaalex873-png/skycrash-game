@@ -1492,7 +1492,7 @@ skySound.play("countdown");
   }, 1000);
   }
   
-async function tick(now) {
+    async function tick(now) {
   if (phase !== "running") return;
 
   try {
@@ -1500,7 +1500,7 @@ async function tick(now) {
 
     if (phase !== "running") return;
 
-    // Confirm this is still the round we joined.
+    // Make sure we are following the correct server round.
     if (
       serverRoundId !== null &&
       data.roundId !== serverRoundId
@@ -1510,40 +1510,30 @@ async function tick(now) {
       return;
     }
 
-    // The server reports null when the round is not running
-    // or has crashed.
-    if (
-  data.status === "crashed" ||
-  data.multiplier === null
-) {
-  if (data.status === "crashed") {
-    if (typeof data.crashAt === "number") {
-      crashAt = data.crashAt;
-    }
-
-    phase = "running";
-    multiplier = crashAt || multiplier;
-
-    $("multiplier").textContent =
-      multiplier.toFixed(2) + "x";
-
-    skySound.play("crash");
-    finishCrash();
-    return;
-  }
-
-  animationFrame = requestAnimationFrame(tick);
-  return;
-    }
-
-        $("multiplier").textContent =
-          multiplier.toFixed(2) + "x";
-
-        skySound.play("crash");
-        finishCrash();
-        return;
+    // Handle a server-reported crash.
+    if (data.status === "crashed") {
+      if (typeof data.crashAt === "number") {
+        crashAt = data.crashAt;
       }
 
+      if (crashAt > 0) {
+        multiplier = crashAt;
+      }
+
+      $("multiplier").textContent =
+        multiplier.toFixed(2) + "x";
+
+      skySound.play("crash");
+      finishCrash();
+      return;
+    }
+
+    // Wait for the server to provide a valid multiplier.
+    if (
+      data.status !== "running" ||
+      data.multiplier == null ||
+      !Number.isFinite(Number(data.multiplier))
+    ) {
       animationFrame = requestAnimationFrame(tick);
       return;
     }
@@ -1553,7 +1543,7 @@ async function tick(now) {
     $("multiplier").textContent =
       multiplier.toFixed(2) + "x";
 
-    // Update Panel 1's potential payout.
+    // Update Panel 1.
     if (bet1Placed && !cashedOut) {
       $("cashoutLabel").textContent =
         "CASH OUT · " + multiplier.toFixed(2) + "x";
@@ -1562,7 +1552,7 @@ async function tick(now) {
         formatKSh(betAmount * multiplier);
     }
 
-    // Update Panel 2's potential payout.
+    // Update Panel 2.
     if (bet2Placed && !cashedOut2) {
       $("cashoutLabel2").textContent =
         "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
@@ -1574,7 +1564,7 @@ async function tick(now) {
         formatKSh(bet2Amount * multiplier);
     }
 
-    // Move the plane using the server multiplier.
+    // Animate the plane.
     const progress = Math.min(1, (multiplier - 1) / 8);
     const left = 8 + progress * 77;
     const bottom = 20 + progress * 145;
@@ -1585,7 +1575,7 @@ async function tick(now) {
     $("trail").style.width =
       Math.max(0, left - 8) + "%";
 
-    // Auto Cash-Out applies to Panel 1.
+    // Auto cash-out for Panel 1.
     if (
       $("autoCash").checked &&
       bet1Placed &&
@@ -1596,15 +1586,19 @@ async function tick(now) {
     }
 
     animationFrame = requestAnimationFrame(tick);
+
   } catch (error) {
+    console.error("SkyCrash server polling error:", error);
+
     $("status").textContent = "⚠️ Reconnecting to server...";
-    animationFrame = setTimeout(() => {
+
+    setTimeout(() => {
       if (phase === "running") {
         animationFrame = requestAnimationFrame(tick);
       }
     }, 1000);
   }
-}
+  }
 
 function cashOut() {
   if (
