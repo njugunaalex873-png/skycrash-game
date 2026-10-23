@@ -1506,12 +1506,28 @@ async function tick(now) {
     // The server reports null when the round is not running
     // or has crashed.
     if (
-      data.status === "crashed" ||
-      data.multiplier === null
-    ) {
-      if (data.status === "crashed") {
-        phase = "waiting";
-        multiplier = crashAt || multiplier;
+  data.status === "crashed" ||
+  data.multiplier === null
+) {
+  if (data.status === "crashed") {
+    if (typeof data.crashAt === "number") {
+      crashAt = data.crashAt;
+    }
+
+    phase = "running";
+    multiplier = crashAt || multiplier;
+
+    $("multiplier").textContent =
+      multiplier.toFixed(2) + "x";
+
+    skySound.play("crash");
+    finishCrash();
+    return;
+  }
+
+  animationFrame = requestAnimationFrame(tick);
+  return;
+    }
 
         $("multiplier").textContent =
           multiplier.toFixed(2) + "x";
