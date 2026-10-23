@@ -943,10 +943,10 @@ function startRound() {
 let bettingCountdownTimer = null;
 let bettingCountdown = 10;
 
-function startBettingCountdown() {
-  // Do not start a second countdown.
-  if (bettingCountdownTimer !== null) return;
 
+function startBettingCountdown() {
+  // Start only one countdown per round.
+  if (bettingCountdownTimer !== null) return;
   if (phase !== "ready") return;
 
   bettingCountdown = 10;
@@ -974,12 +974,15 @@ function startBettingCountdown() {
       bettingCountdownTimer = null;
 
       if (bet1Placed || bet2Placed) {
+        $("status").textContent = "🚀 Taking off!";
         startRound();
       } else {
         $("status").textContent = "Waiting for bets";
       }
     }
   }, 1000);
+  }
+  
 
 function tick(now) {
   if (phase !== "running") return;
