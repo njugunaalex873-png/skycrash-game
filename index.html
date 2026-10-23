@@ -1388,6 +1388,7 @@ function startRound() {
     "Round started! Cash out either bet before the crash.";
 
   $("status").textContent = "🚀 Flying...";
+  skySound.play("flight");
 
   setControls();
   animationFrame = requestAnimationFrame(tick);
@@ -1474,6 +1475,17 @@ function tick(now) {
     multiplier = crashAt;
     $("multiplier").textContent =
       multiplier.toFixed(2) + "x";
+    if (multiplier >= crashAt) {
+multiplier = crashAt;
+
+$("multiplier").textContent =
+multiplier.toFixed(2) + "x";
+
+skySound.play("crash");
+
+finishCrash();
+return;
+    }
     finishCrash();
     return;
   }
