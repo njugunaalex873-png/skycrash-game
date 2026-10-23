@@ -768,3 +768,115 @@ h3 {
     font-size: 19px;
   }
    }
+/* =====================================
+   SKYCRASH CASH-OUT WIN NOTIFICATION
+   ===================================== */
+
+.win-notification[hidden] {
+  display: none !important;
+}
+
+.win-notification {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 10px;
+  right: 10px;
+  z-index: 99999;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 0.8fr) 38px;
+  align-items: center;
+  gap: 8px;
+
+  min-height: 92px;
+  padding: 12px;
+  border: 2px solid #287c3b;
+  border-radius: 24px;
+
+  background: rgba(15, 43, 25, 0.96);
+  color: #ffffff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+
+  font-family: Arial, sans-serif;
+}
+
+.win-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  min-width: 0;
+}
+
+.win-message span {
+  color: #d8e5d8;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.win-message strong {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.win-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  min-height: 62px;
+  padding: 8px;
+  border-radius: 30px;
+  background: #428b2b;
+  text-align: center;
+}
+
+.win-amount span {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.win-amount strong {
+  font-size: 20px;
+  overflow-wrap: anywhere;
+}
+
+.close-win-notification {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+@media (max-width: 360px) {
+  .win-notification {
+    grid-template-columns: minmax(0, 1fr) minmax(95px, 0.8fr) 32px;
+    gap: 5px;
+    padding: 8px;
+  }
+
+  .win-message span {
+    font-size: 11px;
+  }
+
+  .win-message strong,
+  .win-amount strong {
+    font-size: 17px;
+  }
+
+  .win-amount span {
+    font-size: 10px;
+  }
+
+  .close-win-notification {
+    width: 30px;
+    height: 30px;
+  }
+   }
