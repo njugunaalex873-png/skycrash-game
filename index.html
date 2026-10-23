@@ -249,6 +249,25 @@ h3 {
 </head>
 
 <body>
+  <!-- CASH-OUT WIN NOTIFICATION -->
+<div id="win-notification" class="win-notification" hidden>
+  <div class="win-message">
+    <span id="win-title">You have cashed out!</span>
+    <strong id="win-multiplier">1.00x</strong>
+  </div>
+
+  <div class="win-amount">
+    <span>★ Win KES ★</span>
+    <strong id="win-payout">10.00</strong>
+  </div>
+
+  <button
+    type="button"
+    id="close-win-notification"
+    class="close-win-notification"
+    aria-label="Close win notification"
+  >×</button>
+</div>
 
 <header>
   <div class="logo">✈ SkyCrash</div>
@@ -590,6 +609,16 @@ function cashOut() {
   cashedOut = true;
 
   const payout = Math.floor(betAmount * multiplier);
+  // Display the cash-out win notification.
+$("win-title").textContent = "You have cashed out!";
+
+$("win-multiplier").textContent =
+  multiplier.toFixed(2) + "x";
+
+$("win-payout").textContent =
+  payout.toFixed(2);
+
+$("win-notification").hidden = false;
   $("cashoutLabel").textContent =
   "CASHED OUT · " + multiplier.toFixed(2) + "x";
 
@@ -707,6 +736,9 @@ $("autoTab").addEventListener("click", () => {
 updateBetDisplay();
 $("play").addEventListener("click", placeBet);
 $("cashout").addEventListener("click", cashOut);
+  $("close-win-notification").addEventListener("click", () => {
+  $("win-notification").hidden = true;
+});
 
 $("autoBet").addEventListener("change", () => {
   setControls();
