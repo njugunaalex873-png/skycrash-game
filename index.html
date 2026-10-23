@@ -791,34 +791,16 @@ function cashOut() {
   cashedOut = true;
 
   const payout = Math.floor(betAmount * multiplier);
-  // Display the cash-out win notification.
+  // Show the win notification after a successful cash-out.
 $("win-title").textContent = "You have cashed out!";
 
 $("win-multiplier").textContent =
   multiplier.toFixed(2) + "x";
 
 $("win-payout").textContent =
-  payout.toFixed(2);
+  payout.toLocaleString() + " coins";
 
 $("win-notification").hidden = false;
-  $("cashoutLabel").textContent =
-  "CASHED OUT · " + multiplier.toFixed(2) + "x";
-
-$("cashoutValue").textContent =
-  payout.toLocaleString() + " coins";
-  balance += payout;
-
-  updateBalance();
-  saveGame();
-
-  $("result").textContent =
-    "Cashed out at " + multiplier.toFixed(2) +
-    "x. Virtual payout: " + payout + " coins.";
-
-  $("result").style.color = "var(--green)";
-  $("status").textContent = "✓ CASHED OUT";
-  $("cashout").disabled = true;
-}
 
 function finishCrash() {
   phase = "waiting";
