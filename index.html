@@ -476,6 +476,110 @@ h3 {
 }
   
   
+/* AVIATOR-STYLE MATCHING BETTING PANELS */
+
+.betting-card {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  margin: 0 0 10px;
+  border: 1px solid #26344a;
+  border-radius: 12px;
+}
+
+/* Identical two-column betting layout */
+.betting-card .bet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+/* Matching stake controls */
+.betting-card .amount-control {
+  width: 100%;
+  height: 40px;
+  gap: 4px;
+  padding: 3px;
+  margin-bottom: 8px;
+}
+
+.betting-card .amount-control button {
+  flex: 0 0 28px;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.betting-card .amount-control input {
+  min-width: 0;
+  height: 30px;
+  padding: 4px 0;
+  margin: 0;
+  font-size: 13px;
+}
+
+/* Identical quick-bet grids */
+.betting-card .quick-bets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.betting-card .quick-bets button {
+  width: 100%;
+  height: 34px;
+  padding: 4px 2px;
+  font-size: 12px;
+}
+
+/* Identical action button dimensions */
+.betting-card .bet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.betting-card .bet-actions button {
+  width: 100%;
+  height: 74px;
+  min-height: 74px;
+  padding: 6px 3px;
+  gap: 5px;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Consistent panel headings and descriptions */
+.betting-card > .label {
+  min-height: 14px;
+  margin-bottom: 10px;
+  font-size: 11px;
+}
+
+.betting-card .note {
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+/* Keep both panels side by side on phones */
+@media (max-width: 360px) {
+  .betting-card {
+    padding: 8px;
+  }
+
+  .betting-card .bet-layout {
+    gap: 6px;
+  }
+
+  .betting-card .bet-actions button {
+    height: 68px;
+    min-height: 68px;
+    font-size: 10px;
+  }
+  }
+  
 </style>
   <link rel="stylesheet" href="style.css">
 </head>
