@@ -1406,9 +1406,6 @@ async function getServerGameMultiplier() {
   async function startRound() {
   if (phase !== "ready") return;
 
-  phase = "running";
-  multiplier = 1;
-
   $("result").textContent = "Connecting to SkyCrash server...";
   $("status").textContent = "⏳ Connecting...";
   setControls();
@@ -1416,12 +1413,16 @@ async function getServerGameMultiplier() {
   try {
     const data = await startServerGameRound();
 
-    if (data.status !== "running") {
-      throw new Error("The server round has not started. Please try again.");
+    if (data.status !== "running" || !data.roundId) {
+      throw new Error(
+        "The server round is not running yet. Please try again."
+      );
     }
 
     serverRoundId = data.roundId;
-    crashAt = null;
+    crashAt = 0;
+    multiplier = 1;
+    phase = "running";
     roundStartedAt = performance.now();
 
     resetFlight();
@@ -1738,38 +1739,53 @@ function finishCrash() {
   saveGame();
   setControls();
 
-  nextRoundTimer = setTimeout(() => {
-    phase = "ready";
+  nextRoundTimer = setTimeout(async () => {
+    $("status").textContent = "Synchronizing next round...";
+    $("result").textContent = "Connecting to the next round...";
 
-    bet1Placed = false;
-    cashedOut = false;
-    betAmount = 0;
+    try {
+      const data = await getServerGameStatus();
 
-    bet2Placed = false;
-    cashedOut2 = false;
-    bet2Amount = 0;
+      if (!data || !data.roundId) {
+        throw new Error("No round is available yet.");
+      }
 
-    $("bet2Status").textContent = "Ready for takeoff";
-    $("bet2Payout").textContent = "0 coins";
+      serverRoundId = data.roundId;
+      phase = "ready";
 
-    resetFlight();
+      bet1Placed = false;
+      cashedOut = false;
+      betAmount = 0;
 
-    $("result").style.color = "var(--green)";
-    $("status").textContent = "Ready for takeoff";
+      bet2Placed = false;
+      cashedOut2 = false;
+      bet2Amount = 0;
 
-    
-    setControls();
-    nextRoundTimer = null;
+      $("bet2Status").textContent = "Ready for takeoff";
+      $("bet2Payout").textContent = "0 coins";
 
-    if ($("autoBet").checked) {
-      placeBet();
-    } else {
+      resetFlight();
+
+      $("result").style.color = "var(--green)";
       $("status").textContent = "Ready for takeoff";
-    }
-  }, 2500);
-}
-  
 
+      setControls();
+      nextRoundTimer = null;
+
+      if ($("autoBet").checked) {
+        placeBet();
+      }
+    } catch (error) {
+      phase = "waiting";
+      $("status").textContent = "Waiting for server...";
+      $("result").textContent =
+        "Could not sync the next round. Reload the game to retry.";
+      setControls();
+      nextRoundTimer = null;
+    }
+  }, 3500);
+   }
+  
 // PANEL 1 AMOUNT CONTROLS
 $("decreaseBet").onclick = () => {
   $("bet").value = Math.max(
