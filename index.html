@@ -718,6 +718,18 @@ html body button#play2.red-button {
   color: #ffffff !important;
   border: 2px solid #ff8a9e !important;
 } 
+  #sound-toggle {
+width: auto;
+padding: 8px 12px;
+margin: 8px 0;
+border: 1px solid #35d07f;
+border-radius: 8px;
+background: #10251c;
+color: #ffffff;
+font-size: 12px;
+font-weight: bold;
+cursor: pointer;
+  }
   
 </style>
   <link rel="stylesheet" href="style.css">
@@ -763,6 +775,9 @@ html body button#play2.red-button {
   Reset
 </button>
 </div>
+  <button id="sound-toggle" type="button" aria-pressed="true">
+  🔊 Sound ON
+  </button>
 </header>
 
 <main>
@@ -971,6 +986,91 @@ $("result").textContent =
 "✅ Virtual coins reset to 50,000!";
 
 $("result").style.color = "var(--green)";
+}
+  const skySound = {
+enabled: true,
+context: null,
+
+play(type) {
+if (!this.enabled) return;
+
+try {
+  const AudioContextClass =
+    window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContextClass) return;
+
+  if (!this.context) {
+    this.context = new AudioContextClass();
+  }
+
+  const ctx = this.context;
+
+  if (ctx.state === "suspended") {
+    ctx.resume();
+  }
+
+  const sounds = {
+    countdown: { frequency: 660, duration: 0.12, wave: "sine" },
+    flight:    { frequency: 440, duration: 0.08, wave: "triangle" },
+    cashout:   { frequency: 880, duration: 0.22, wave: "sine" },
+    crash:     { frequency: 130, duration: 0.45, wave: "sawtooth" }
+  };
+
+  const sound = sounds[type];
+  if (!sound) return;
+
+  const oscillator = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  oscillator.type = sound.wave;
+  oscillator.frequency.setValueAtTime(
+    sound.frequency,
+    ctx.currentTime
+  );
+
+  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.12,
+    ctx.currentTime + 0.02
+  );
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    ctx.currentTime + sound.duration
+  );
+
+  oscillator.connect(gain);
+  gain.connect(ctx.destination);
+
+  oscillator.start();
+  oscillator.stop(ctx.currentTime + sound.duration);
+} catch (error) {
+  console.warn("SkyCrash sound unavailable:", error);
+}
+
+}
+};
+
+const soundToggle = document.getElementById("sound-toggle");
+
+if (soundToggle) {
+soundToggle.addEventListener("click", () => {
+skySound.enabled = !skySound.enabled;
+
+soundToggle.textContent = skySound.enabled
+  ? "🔊 Sound ON"
+  : "🔇 Sound OFF";
+
+soundToggle.setAttribute(
+  "aria-pressed",
+  String(skySound.enabled)
+);
+
+if (skySound.enabled) {
+  skySound.play("countdown");
+}
+
+});
 }
 function saveGame() {
   try {
