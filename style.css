@@ -703,3 +703,68 @@ h3 {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
   }
+/* CASH OUT ABOVE BET */
+
+.bet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.bet-actions #cashout {
+  order: 1;
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 5px;
+  border: 2px solid #ff8497;
+  border-radius: 23px;
+  background: #c9002b;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.bet-actions #play {
+  order: 2;
+  width: 100%;
+  min-height: 90px;
+}
+
+#cashoutLabel,
+#cashoutValue {
+  display: block;
+}
+
+#cashoutLabel {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+#cashoutValue {
+  margin-top: 5px;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.bet-actions #cashout:disabled {
+  opacity: 0.4;
+}
+
+.bet-actions #cashout:disabled {
+  display: none;
+}
+
+@media (max-width: 360px) {
+  .bet-actions #cashout,
+  .bet-actions #play {
+    min-height: 82px;
+  }
+
+  #cashoutLabel {
+    font-size: 15px;
+  }
+
+  #cashoutValue {
+    font-size: 19px;
+  }
+   }
