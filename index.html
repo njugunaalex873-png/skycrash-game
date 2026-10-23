@@ -465,9 +465,16 @@ h3 {
   top: max(12px, env(safe-area-inset-top));
 }
 
+/* Panel 1 notification stays at the top */
+#win-notification {
+  top: max(12px, env(safe-area-inset-top));
+}
+
+/* Panel 2 notification appears below Panel 1 */
 #win-notification-2 {
   top: calc(max(12px, env(safe-area-inset-top)) + 82px);
 }
+  
   
 </style>
   <link rel="stylesheet" href="style.css">
