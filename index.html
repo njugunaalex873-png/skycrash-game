@@ -440,12 +440,7 @@ h3 {
     <strong id="win-payout">10.00</strong>
   </div>
 
-  <button
-    type="button"
-    id="close-win-notification"
-    class="close-win-notification"
-    aria-label="Close win notification"
-  >×</button>
+
 </div>
 
 <header>
@@ -922,11 +917,6 @@ $("autoTab").onclick = function () {
 // Main game buttons.
 $("play").onclick = placeBet;
 $("cashout").onclick = cashOut;
-
-// Close the win notification.
-$("close-win-notification").onclick = function () {
-  $("win-notification").hidden = true;
-};
 
 // Auto Bet.
 $("autoBet").onchange = function () {
