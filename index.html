@@ -773,6 +773,7 @@ function updateBet2Display() {
       : "0 coins";
 }
 
+
 function setControls() {
   const running = phase === "running";
   const waiting = phase === "waiting";
@@ -780,15 +781,14 @@ function setControls() {
 
   // PANEL 1
   $("play").disabled = !ready || bet1Placed;
+  $("bet").disabled = !ready || bet1Placed;
+  $("decreaseBet").disabled = !ready || bet1Placed;
+  $("increaseBet").disabled = !ready || bet1Placed;
 
-  $("bet").disabled = !ready;
-  $("decreaseBet").disabled = !ready;
-  $("increaseBet").disabled = !ready;
-
-  $("cashout").hidden = !running || !bet1Placed || cashedOut;
+  $("cashout").hidden =
+    !running || !bet1Placed || cashedOut;
   $("cashout").style.display =
     running && bet1Placed && !cashedOut ? "flex" : "none";
-
   $("cashout").disabled =
     !running || !bet1Placed || cashedOut;
 
@@ -805,19 +805,15 @@ function setControls() {
   }
 
   // PANEL 2
-  $("play2").disabled =
-    waiting || bet2Placed || (!ready && !running);
-
-  $("bet2").disabled = !ready;
-  $("decreaseBet2").disabled = !ready;
-  $("increaseBet2").disabled = !ready;
+  $("play2").disabled = !ready || bet2Placed;
+  $("bet2").disabled = !ready || bet2Placed;
+  $("decreaseBet2").disabled = !ready || bet2Placed;
+  $("increaseBet2").disabled = !ready || bet2Placed;
 
   $("cashout2").hidden =
     !running || !bet2Placed || cashedOut2;
-
   $("cashout2").style.display =
     running && bet2Placed && !cashedOut2 ? "flex" : "none";
-
   $("cashout2").disabled =
     !running || !bet2Placed || cashedOut2;
 
@@ -837,6 +833,7 @@ function setControls() {
 
   updateBet2Display();
 }
+  
 
 function resetFlight() {
   $("plane").textContent = "✈️";
@@ -851,6 +848,7 @@ function resetFlight() {
   $("multiplier").textContent = "1.00x";
 }
 
+coins for Bet 2.";
 function placeBet() {
   if (phase !== "ready" || bet1Placed) return;
 
@@ -876,15 +874,15 @@ function placeBet() {
   updateBalance();
   saveGame();
 
-  $("result").textContent = "Bet 1 placed! Flight starting.";
-  startRound();
+  $("result").textContent =
+    "Bet 1 placed! Place Bet 2 before takeoff.";
+
+  setControls();
+  startBettingCountdown();
 }
 
 function placeBet2() {
-  if (
-    (phase !== "ready" && phase !== "running") ||
-    bet2Placed
-  ) return;
+  if (phase !== "ready" || bet2Placed) return;
 
   const amount = Number($("bet2").value);
 
@@ -912,12 +910,9 @@ function placeBet2() {
     "Bet 2 placed · " +
     amount.toLocaleString() + " coins";
 
-  if (phase === "ready") {
-    startRound();
-  } else {
-    setControls();
+  setControls();
+  startBettingCountdown();
   }
-}
 
 function startRound() {
   if (phase !== "ready") return;
@@ -944,6 +939,47 @@ function startRound() {
   setControls();
   animationFrame = requestAnimationFrame(tick);
 }
+  
+let bettingCountdownTimer = null;
+let bettingCountdown = 10;
+
+function startBettingCountdown() {
+  // Do not start a second countdown.
+  if (bettingCountdownTimer !== null) return;
+
+  if (phase !== "ready") return;
+
+  bettingCountdown = 10;
+
+  $("status").textContent =
+    "⏳ Takeoff in " + bettingCountdown + " seconds";
+
+  $("result").textContent =
+    "Place your bets on either or both panels!";
+
+  bettingCountdownTimer = setInterval(() => {
+    if (phase !== "ready") {
+      clearInterval(bettingCountdownTimer);
+      bettingCountdownTimer = null;
+      return;
+    }
+
+    bettingCountdown--;
+
+    if (bettingCountdown > 0) {
+      $("status").textContent =
+        "⏳ Takeoff in " + bettingCountdown + " seconds";
+    } else {
+      clearInterval(bettingCountdownTimer);
+      bettingCountdownTimer = null;
+
+      if (bet1Placed || bet2Placed) {
+        startRound();
+      } else {
+        $("status").textContent = "Waiting for bets";
+      }
+    }
+  }, 1000);
 
 function tick(now) {
   if (phase !== "running") return;
@@ -1165,14 +1201,18 @@ function finishCrash() {
     $("result").style.color = "var(--green)";
     $("status").textContent = "Ready for takeoff";
 
+    
     setControls();
     nextRoundTimer = null;
 
     if ($("autoBet").checked) {
       placeBet();
+    } else {
+      $("status").textContent = "Ready for takeoff";
     }
   }, 2500);
 }
+  
 
 // PANEL 1 AMOUNT CONTROLS
 $("decreaseBet").onclick = () => {
