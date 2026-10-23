@@ -785,28 +785,47 @@ function tick(now) {
   animationFrame = requestAnimationFrame(tick);
 }
     
-function cashOut() {
+
+    function cashOut() {
   if (phase !== "running" || cashedOut) return;
 
   cashedOut = true;
 
   const payout = Math.floor(betAmount * multiplier);
-  // Show the win notification after a successful cash-out.
-$("win-title").textContent = "You have cashed out!";
 
-$("win-multiplier").textContent =
-  multiplier.toFixed(2) + "x";
+  // Show the win notification.
+  $("win-title").textContent = "You have cashed out!";
+  $("win-multiplier").textContent =
+    multiplier.toFixed(2) + "x";
+  $("win-payout").textContent =
+    payout.toLocaleString() + " coins";
+  $("win-notification").hidden = false;
 
-$("win-payout").textContent =
-  payout.toLocaleString() + " coins";
+  // Add the virtual winnings to the balance.
+  balance += payout;
+  updateBalance();
+  saveGame();
 
-$("win-notification").hidden = false;
+  $("cashoutLabel").textContent =
+    "CASHED OUT · " + multiplier.toFixed(2) + "x";
+  $("cashoutValue").textContent =
+    payout.toLocaleString() + " coins";
+
+  $("result").textContent =
+    "Cashed out at " + multiplier.toFixed(2) +
+    "x. Virtual payout: " + payout + " coins.";
+
+  $("result").style.color = "var(--green)";
+  $("status").textContent = "✓ CASHED OUT";
+  $("cashout").disabled = true;
+}
 
 function finishCrash() {
   phase = "waiting";
 
   if (animationFrame !== null) {
     cancelAnimationFrame(animationFrame);
+    animationFrame = null;
   }
 
   $("multiplier").style.color = "var(--red)";
@@ -825,7 +844,6 @@ function finishCrash() {
     $("result").textContent =
       "Crashed at " + crashAt.toFixed(2) +
       "x. You lost " + betAmount + " virtual coins.";
-
     $("result").style.color = "var(--red)";
   } else {
     $("result").textContent +=
@@ -848,7 +866,7 @@ function finishCrash() {
       placeBet();
     }
   }, 2500);
-  }
+    }
   // Update the amount displayed on the Bet button.
 function updateBetDisplay() {
   const amount = Number($("bet").value);
