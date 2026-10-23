@@ -244,6 +244,185 @@ h3 {
     padding: 12px;
   }
 }
+  /* Betting controls */
+.bet-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 5px;
+  border-radius: 30px;
+  background: #090e16;
+}
+
+.bet-tab {
+  flex: 1;
+  background: transparent;
+  color: #94a5bd;
+  border-radius: 25px;
+}
+
+.bet-tab.active {
+  background: #303746;
+  color: white;
+}
+
+.bet-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.amount-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  background: #091525;
+  border-radius: 30px;
+  margin-bottom: 10px;
+}
+
+.amount-control button {
+  width: 38px;
+  min-width: 38px;
+  padding: 8px 0;
+  border-radius: 50%;
+  background: #303746;
+  color: white;
+}
+
+.amount-control input {
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 8px 2px;
+  text-align: center;
+  border: 0;
+  background: transparent;
+}
+
+.quick-bets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.quick-bets button {
+  padding: 10px 3px;
+  border-radius: 25px;
+  background: #091525;
+  color: white;
+  font-size: 13px;
+}
+
+.bet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bet-actions button {
+  min-height: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+#cashout {
+  background: #d87900;
+  color: white;
+  border: 2px solid #ffb24d;
+}
+
+#cashout:disabled {
+  opacity: 0.5;
+}
+
+#play {
+  background: #19b900;
+  color: white;
+  border: 2px solid #83f76c;
+}
+
+#win-notification[hidden],
+#cashout[hidden] {
+  display: none !important;
+}
+
+/* Win notification, similar to your reference screenshot */
+.win-notification {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 10px;
+  right: 10px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #398b52;
+  border-radius: 40px;
+  background: rgba(17, 45, 30, 0.97);
+  box-shadow: 0 5px 22px #0008;
+}
+
+.win-message {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #e5f6e8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.win-message strong {
+  font-size: 16px;
+}
+
+.win-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 100px;
+  padding: 9px 12px;
+  border-radius: 30px;
+  background: #477f2b;
+  color: white;
+  font-size: 12px;
+}
+
+.win-amount strong {
+  font-size: 18px;
+}
+
+.close-win-notification {
+  width: 34px;
+  min-width: 34px;
+  padding: 5px;
+  border-radius: 50%;
+  background: #294536;
+  color: white;
+  font-size: 22px;
+}
+
+@media (max-width: 360px) {
+  .bet-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .bet-actions button {
+    min-height: 70px;
+  }
+  }
 </style>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -306,9 +485,9 @@ h3 {
   <div class="bet-layout">
     <div class="bet-settings">
       <label class="amount-control">
-        <button type="button" id="decreaseBet" aria-label="Decrease bet">−</button>
-        <input id="bet" type="number" value="50" min="1" step="1" aria-label="Virtual bet amount">
-        <button type="button" id="increaseBet" aria-label="Increase bet">+</button>
+        <button type="button" id="decreaseBet">−</button>
+        <input id="bet" type="number" value="50" min="1" step="1">
+        <button type="button" id="increaseBet">+</button>
       </label>
 
       <div class="quick-bets">
@@ -321,10 +500,12 @@ h3 {
       <div class="auto-settings" id="autoSettings" hidden>
         <label for="autoTarget">Auto cash-out multiplier</label>
         <input id="autoTarget" type="number" value="2" min="1.01" step="0.01">
+
         <label class="auto-check">
           <input id="autoBet" type="checkbox">
           Enable Auto Bet
         </label>
+
         <label class="auto-check">
           <input id="autoCash" type="checkbox">
           Enable Auto Cash-Out
@@ -333,22 +514,21 @@ h3 {
     </div>
 
     <div class="bet-actions">
-    <div class="bet-actions">
+      <button id="cashout" class="red-button" type="button" disabled hidden>
+        <span id="cashoutLabel">CASH OUT</span>
+        <strong id="cashoutValue">0 coins</strong>
+      </button>
 
-  <button id="cashout" class="red-button" type="button" disabled>
-    <span id="cashoutLabel">CASH OUT</span>
-    <strong id="cashoutValue">0 coins</strong>
-  </button>
-
-  <button id="play" class="green-button" type="button">
-    <span id="playLabel">BET</span>
-    <strong id="betDisplay">50 coins</strong>
-  </button>
-
+      <button id="play" class="green-button" type="button">
+        <span id="playLabel">BET</span>
+        <strong id="betDisplay">50 coins</strong>
+      </button>
     </div>
+  </div>
 
   <p class="note">Demo game · Virtual coins only</p>
 </section>
+
 
 <section class="card">
   <h3>📊 Recent Crashes</h3>
@@ -453,29 +633,31 @@ function setControls() {
   const running = phase === "running";
   const waiting = phase === "waiting";
 
-  // Bet button is unavailable during a round or between rounds.
   $("play").disabled = running || waiting;
 
-  // Show Cash Out immediately when the flight starts.
-  // Keep it visible while waiting for the next round.
+  // Show Cash Out as soon as the flight starts.
+  $("cashout").hidden = !running && !waiting;
   $("cashout").style.display =
-    running || waiting ? "block" : "none";
+    running || waiting ? "flex" : "none";
 
-  // Cash Out only works while flying and before cashing out.
   $("cashout").disabled = !running || cashedOut;
 
-  // Update the button text for each game state.
   if (waiting) {
-    $("cashoutLabel").textContent = "Cancel";
+    $("cashoutLabel").textContent = "Round ended";
     $("cashoutValue").textContent = "Waiting for next round";
   } else if (running && cashedOut) {
     $("cashoutLabel").textContent = "Cashed Out";
+  } else if (running) {
+    $("cashoutLabel").textContent =
+      "CASH OUT · " + multiplier.toFixed(2) + "x";
+  } else {
+    $("cashoutLabel").textContent = "CASH OUT";
+    $("cashoutValue").textContent = "0 coins";
   }
 
-  // Prevent bet settings from changing during a round.
   $("bet").disabled = running || waiting;
   $("autoTarget").disabled = running || waiting;
-  }
+    }
 function resetFlight() {
   $("plane").textContent = "✈️";
   $("plane").style.left = "8%";
