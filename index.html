@@ -1382,6 +1382,28 @@ async function getServerGameMultiplier() {
 
   return await response.json();
   }
+  async function startServerGameRound() {
+  const response = await fetch(
+    `${SKYCRASH_API}/api/game-start`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({})
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.error || "Could not start the server round."
+    );
+  }
+
+  return data;
+  }
 function startRound() {
   if (phase !== "ready") return;
 
