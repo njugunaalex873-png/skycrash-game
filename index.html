@@ -1754,6 +1754,7 @@ $("play").onclick = () => {
     placeBet();
   }
 };
+
 $("cashout").onclick = cashOut;
 
 $("play2").onclick = () => {
@@ -1763,8 +1764,10 @@ $("play2").onclick = () => {
     placeBet2();
   }
 };
+
 $("cashout2").onclick = cashOut2;
-  // RESET VIRTUAL COINS
+
+// RESET VIRTUAL MONEY
 $("resetCoinsButton").onclick = resetCoins;
 
 // AUTO BET: Panel 1 only
@@ -1775,7 +1778,6 @@ $("autoBet").onchange = () => {
     placeBet();
   }
 };
-
 // AUTO CASH-OUT: Panel 1 only
 $("autoCash").onchange = () => {
   if (!$("autoCash").checked) return;
