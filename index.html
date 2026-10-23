@@ -849,70 +849,74 @@ function finishCrash() {
     }
   }, 2500);
   }
-  
-// Update the amount displayed on the Bet button.
+  // Update the amount displayed on the Bet button.
 function updateBetDisplay() {
   const amount = Number($("bet").value);
+
   $("betDisplay").textContent =
-    Number.isFinite(amount) && amount >= 0
+    Number.isFinite(amount) && amount >= 1
       ? amount.toLocaleString() + " coins"
       : "Enter amount";
 }
 
-// Increase or decrease the virtual bet.
-$("decreaseBet").addEventListener("click", () => {
+// Decrease bet.
+$("decreaseBet").onclick = function () {
   const current = Number($("bet").value) || 1;
   $("bet").value = Math.max(1, current - 10);
   updateBetDisplay();
-});
+};
 
-$("increaseBet").addEventListener("click", () => {
+// Increase bet.
+$("increaseBet").onclick = function () {
   const current = Number($("bet").value) || 0;
   $("bet").value = Math.floor(current + 10);
   updateBetDisplay();
-});
+};
 
-// Quick bet amount buttons.
-document.querySelectorAll("[data-bet]").forEach(button => {
-  button.addEventListener("click", () => {
+// Quick bet buttons.
+document.querySelectorAll("[data-bet]").forEach(function (button) {
+  button.onclick = function () {
     $("bet").value = button.dataset.bet;
     updateBetDisplay();
-  });
+  };
 });
 
-// Keep the displayed amount synchronized with manual input.
-$("bet").addEventListener("input", updateBetDisplay);
+// Manual bet input.
+$("bet").oninput = updateBetDisplay;
 
-// Switch between Bet and Auto views.
-$("manualTab").addEventListener("click", () => {
+// Bet and Auto tabs.
+$("manualTab").onclick = function () {
   $("manualTab").classList.add("active");
   $("autoTab").classList.remove("active");
   $("autoSettings").hidden = true;
-});
+};
 
-$("autoTab").addEventListener("click", () => {
+$("autoTab").onclick = function () {
   $("autoTab").classList.add("active");
   $("manualTab").classList.remove("active");
   $("autoSettings").hidden = false;
-});
+};
 
-// Initialize the displayed amount.
-updateBetDisplay();
-$("play").addEventListener("click", placeBet);
-$("cashout").addEventListener("click", cashOut);
-  $("close-win-notification").addEventListener("click", () => {
+// Main game buttons.
+$("play").onclick = placeBet;
+$("cashout").onclick = cashOut;
+
+// Close the win notification.
+$("close-win-notification").onclick = function () {
   $("win-notification").hidden = true;
-});
+};
 
-$("autoBet").addEventListener("change", () => {
+// Auto Bet.
+$("autoBet").onchange = function () {
   setControls();
 
   if ($("autoBet").checked && phase === "ready") {
     placeBet();
   }
-});
+};
 
-$("autoCash").addEventListener("change", () => {
+// Auto Cash-Out.
+$("autoCash").onchange = function () {
   if (!$("autoCash").checked) return;
 
   const target = Number($("autoTarget").value);
@@ -922,7 +926,10 @@ $("autoCash").addEventListener("change", () => {
     $("result").textContent =
       "Set auto cash-out to at least 1.01x.";
   }
-});
+};
+
+// Initialize the amount display.
+updateBetDisplay();
 
 window.addEventListener("pagehide", () => {
   if (animationFrame !== null) {
