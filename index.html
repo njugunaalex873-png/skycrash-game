@@ -1485,76 +1485,102 @@ skySound.play("countdown");
   }, 1000);
   }
   
-
-function tick(now) {
+async function tick(now) {
   if (phase !== "running") return;
 
-  const elapsed = (now - roundStartedAt) / 1000;
-  multiplier = Math.exp(elapsed * 0.12);
+  try {
+    const data = await getServerGameMultiplier();
 
-  $("multiplier").textContent =
-    multiplier.toFixed(2) + "x";
+    if (phase !== "running") return;
 
-  // Update Panel 1's potential payout.
-  if (bet1Placed && !cashedOut) {
-    $("cashoutLabel").textContent =
-      "CASH OUT · " + multiplier.toFixed(2) + "x";
+    // Confirm this is still the round we joined.
+    if (
+      serverRoundId !== null &&
+      data.roundId !== serverRoundId
+    ) {
+      $("status").textContent = "Waiting for round sync...";
+      animationFrame = requestAnimationFrame(tick);
+      return;
+    }
 
-    $("cashoutValue").textContent =
-formatKSh(betAmount * multiplier);
-  }
+    // The server reports null when the round is not running
+    // or has crashed.
+    if (
+      data.status === "crashed" ||
+      data.multiplier === null
+    ) {
+      if (data.status === "crashed") {
+        phase = "waiting";
+        multiplier = crashAt || multiplier;
 
-  // Update Panel 2's potential payout.
-  if (bet2Placed && !cashedOut2) {
-    $("cashoutLabel2").textContent =
-      "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
+        $("multiplier").textContent =
+          multiplier.toFixed(2) + "x";
 
-    $("cashoutValue2").textContent =
-formatKSh(bet2Amount * multiplier);
+        skySound.play("crash");
+        finishCrash();
+        return;
+      }
 
-$("bet2Payout").textContent =
-formatKSh(bet2Amount * multiplier);
-  }
+      animationFrame = requestAnimationFrame(tick);
+      return;
+    }
 
-  if (multiplier >= crashAt) {
-    multiplier = crashAt;
+    multiplier = Number(data.multiplier);
+
     $("multiplier").textContent =
       multiplier.toFixed(2) + "x";
-    if (multiplier >= crashAt) {
-multiplier = crashAt;
 
-$("multiplier").textContent =
-multiplier.toFixed(2) + "x";
+    // Update Panel 1's potential payout.
+    if (bet1Placed && !cashedOut) {
+      $("cashoutLabel").textContent =
+        "CASH OUT · " + multiplier.toFixed(2) + "x";
 
-skySound.play("crash");
-
-finishCrash();
-return;
+      $("cashoutValue").textContent =
+        formatKSh(betAmount * multiplier);
     }
-    finishCrash();
-    return;
+
+    // Update Panel 2's potential payout.
+    if (bet2Placed && !cashedOut2) {
+      $("cashoutLabel2").textContent =
+        "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
+
+      $("cashoutValue2").textContent =
+        formatKSh(bet2Amount * multiplier);
+
+      $("bet2Payout").textContent =
+        formatKSh(bet2Amount * multiplier);
+    }
+
+    // Move the plane using the server multiplier.
+    const progress = Math.min(1, (multiplier - 1) / 8);
+    const left = 8 + progress * 77;
+    const bottom = 20 + progress * 145;
+
+    $("plane").style.left = left + "%";
+    $("plane").style.bottom = bottom + "px";
+
+    $("trail").style.width =
+      Math.max(0, left - 8) + "%";
+
+    // Auto Cash-Out applies to Panel 1.
+    if (
+      $("autoCash").checked &&
+      bet1Placed &&
+      !cashedOut &&
+      multiplier >= Number($("autoTarget").value)
+    ) {
+      cashOut();
+    }
+
+    animationFrame = requestAnimationFrame(tick);
+  } catch (error) {
+    $("status").textContent = "⚠️ Reconnecting to server...";
+    animationFrame = setTimeout(() => {
+      if (phase === "running") {
+        animationFrame = requestAnimationFrame(tick);
+      }
+    }, 1000);
   }
-
-  const progress = Math.min(1, (multiplier - 1) / 8);
-  const left = 8 + progress * 77;
-  const bottom = 20 + progress * 145;
-
-  $("plane").style.left = left + "%";
-  $("plane").style.bottom = bottom + "px";
-
-  $("trail").style.width = Math.max(0, left - 8) + "%";
-
-  // Auto Cash-Out applies to Panel 1.
-  if (
-    $("autoCash").checked &&
-    bet1Placed &&
-    !cashedOut &&
-    multiplier >= Number($("autoTarget").value)
-  ) {
-    cashOut();
-  }
-
-  animationFrame = requestAnimationFrame(tick);
 }
 
 function cashOut() {
