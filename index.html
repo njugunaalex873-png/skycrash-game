@@ -1288,9 +1288,9 @@ function placeBet() {
   }
 
   if (amount > balance) {
-    $("result").textContent =
-      "Not enough virtual coins for Bet 1.";
-    return;
+$("result").textContent =
+"Not enough virtual money (KSh) for Bet 1.";
+return;
   }
 
   betAmount = amount;
