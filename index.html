@@ -1333,9 +1333,9 @@ function placeBet2() {
   updateBalance();
   saveGame();
 
-  $("bet2Status").textContent =
-    "Bet 2 placed · " +
-    amount.toLocaleString() + " coins";
+$("bet2Status").textContent =
+"Bet 2 placed · " +
+formatKSh(amount);
 
   setControls();
   startBettingCountdown();
