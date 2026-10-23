@@ -599,11 +599,7 @@ h3 {
   </div>
 
   <button
-    type="button"
-    class="close-win-notification"
-    onclick="document.getElementById('win-notification').hidden = true"
-    aria-label="Close Bet 1 notification"
-  >×</button>
+
 </div>
 
 <!-- PANEL 2 WIN NOTIFICATION -->
@@ -618,12 +614,6 @@ h3 {
     <strong id="win-payout-2">0 coins</strong>
   </div>
 
-  <button
-    type="button"
-    class="close-win-notification"
-    onclick="document.getElementById('win-notification-2').hidden = true"
-    aria-label="Close Bet 2 notification"
-  >×</button>
 </div>
   
 <header>
@@ -634,6 +624,36 @@ h3 {
 </header>
 
 <main>
+  
+<main>
+
+  <!-- RECENT CRASHES ABOVE THE FLIGHT ARENA -->
+  <section class="card">
+    <h3>📊 Recent Crashes</h3>
+    <div id="history" class="history">
+      <span class="note">Your game history will appear here.</span>
+    </div>
+  </section>
+
+  <!-- FLIGHT ARENA -->
+  <section class="card">
+    <div class="label">FLIGHT ARENA</div>
+
+    <div id="game">
+      <div id="multiplier">1.00x</div>
+      <div id="status">Ready for takeoff</div>
+      <div id="trail"></div>
+      <div id="plane">✈️</div>
+    </div>
+
+    <div id="result" class="result">
+      Welcome to SkyCrash! Place a virtual bet to begin.
+    </div>
+  </section>
+
+  <!-- Keep your two betting panels below this -->
+</main>
+  
 
 <section class="card">
   <div class="label">FLIGHT ARENA</div>
@@ -771,12 +791,6 @@ h3 {
   <p class="note" id="bet2Status">
     Ready for takeoff · Virtual coins only
   </p>
-</section>
-<section class="card">
-  <h3>📊 Recent Crashes</h3>
-  <div id="history" class="history">
-    <span class="note">Your game history will appear here.</span>
-  </div>
 </section>
 
 <section class="card">
