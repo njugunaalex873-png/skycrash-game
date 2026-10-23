@@ -368,12 +368,299 @@ button,
     padding: 13px;
   }
   }
-/* TEMPORARY TEST */
-body {
-  background: #090b14 !important;
-  color: #ffffff !important;
+/* ==========================================
+   SKYCRASH — DARK CRASH-GAME THEME
+   ========================================== */
+
+:root {
+  --bg: #0b0b0b;
+  --panel: #1b1b1d;
+  --panel-inner: #111113;
+  --text: #f5f5f5;
+  --muted: #9b9b9f;
+  --red: #e6002e;
+  --green: #22a900;
+  --border: #29292c;
 }
 
-.card {
-  border: 2px solid #a855f7 !important;
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 12px 8px 30px;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Main game layout */
+
+main,
+.container,
+.game-container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Wallet */
+
+.wallet,
+.balance-card {
+  background: #1b1b1d;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.wallet-value,
+.balance-value {
+  color: #29bd19;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* Recent multiplier history */
+
+.history,
+.history-list,
+#history {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 12px 4px;
+  scrollbar-width: none;
+}
+
+.history::-webkit-scrollbar,
+.history-list::-webkit-scrollbar,
+#history::-webkit-scrollbar {
+  display: none;
+}
+
+.history-item,
+.history span,
+#history span {
+  flex: 0 0 auto;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: #4ba9e9;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Flight area */
+
+#game,
+.game-area,
+.flight-area,
+#game-area {
+  position: relative;
+  height: 350px;
+  min-height: 240px;
+  overflow: hidden;
+  border: 2px solid #292929;
+  border-radius: 34px;
+  background:
+    repeating-conic-gradient(
+      from 250deg at 0% 100%,
+      #080808 0deg 8deg,
+      #151515 8deg 16deg
+    );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Multiplier */
+
+#multiplier,
+.multiplier {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0;
+  color: var(--red);
+  font-size: clamp(54px, 13vw, 100px);
+  font-weight: 900;
+  letter-spacing: 1px;
+  line-height: 1.05;
+  text-shadow: none;
+}
+
+/* Game status */
+
+#status,
+.status,
+.game-status {
+  position: relative;
+  z-index: 1;
+  color: white;
+  font-size: clamp(18px, 5vw, 36px);
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Plane */
+
+#plane,
+.plane {
+  font-size: 42px;
+  filter: none;
+}
+
+/* Betting panels */
+
+.card,
+.bet-panel,
+.controls,
+.game-controls {
+  margin-top: 10px;
+  padding: 15px;
+  border: 0;
+  border-radius: 30px;
+  background: var(--panel);
+  box-shadow: none;
+}
+
+/* Inputs */
+
+input,
+select {
+  min-height: 45px;
+  padding: 10px 12px;
+  border: 1px solid #303034;
+  border-radius: 24px;
+  background: var(--panel-inner);
+  color: white;
+  font-size: 16px;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid #555;
+  box-shadow: none;
+}
+
+/* Buttons */
+
+button,
+.btn {
+  min-height: 46px;
+  border: 0;
+  border-radius: 15px;
+  padding: 12px 16px;
+  color: white;
+}
+
+#bet-button,
+#start-button,
+.primary-button {
+  background: var(--green);
+  color: white;
+  border: 2px solid #83e66c;
+  border-radius: 24px;
+  font-size: 21px;
+  box-shadow: none;
+}
+
+#cashout-button,
+.cashout-button {
+  background: #f4c900;
+  color: #111;
+  border-radius: 24px;
+}
+
+/* Two-column control rows */
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.button-row button {
+  width: 100%;
+}
+
+/* Quick bet controls */
+
+.options-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.options-row button {
+  background: #111113;
+  border-radius: 24px;
+}
+
+/* Bottom sections */
+
+.section-title {
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.notice {
+  color: #a0a0a0;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Small phone screens */
+
+@media (max-width: 400px) {
+  body {
+    padding: 8px 5px 24px;
+  }
+
+  #game,
+  .game-area,
+  .flight-area,
+  #game-area {
+    height: 280px;
+    min-height: 240px;
+    border-radius: 28px;
+  }
+
+  .card,
+  .bet-panel,
+  .controls,
+  .game-controls {
+    padding: 12px;
+    border-radius: 26px;
+  }
+
+  #multiplier,
+  .multiplier {
+    font-size: 58px;
+  }
+
+  #bet-button,
+  #start-button,
+  .primary-button {
+    font-size: 18px;
+  }
 }
