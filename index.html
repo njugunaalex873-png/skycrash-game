@@ -350,7 +350,9 @@ h3 {
 }
 
 #win-notification[hidden],
-#cashout[hidden] {
+#win-notification-2[hidden],
+#cashout[hidden],
+#cashout2[hidden] {
   display: none !important;
 }
 
@@ -446,6 +448,17 @@ h3 {
   opacity: 0.55;
   cursor: not-allowed;
 }
+  #cashout2 {
+  background: #d87900;
+  color: white;
+  border: 2px solid #ffb24d;
+}
+
+#play2 {
+  background: #19b900;
+  color: white;
+  border: 2px solid #83f76c;
+}
 </style>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -457,6 +470,18 @@ h3 {
     <span id="win-title">You have cashed out!</span>
     <strong id="win-multiplier">1.00x</strong>
   </div>
+  <!-- PANEL 2 WIN NOTIFICATION -->
+<div id="win-notification-2" class="win-notification" hidden>
+  <div class="win-message">
+    <span id="win-title-2">Bet 2 cashed out!</span>
+    <strong id="win-multiplier-2">1.00x</strong>
+  </div>
+
+  <div class="win-amount">
+    <span>★ BET 2 WIN ★</span>
+    <strong id="win-payout-2">0 coins</strong>
+  </div>
+</div>
 
   <div class="win-amount">
     <span>★ Win KES ★</span>
@@ -639,6 +664,7 @@ h3 {
 
 </main>
 
+
 <script>
 const $ = id => document.getElementById(id);
 
@@ -646,12 +672,21 @@ let balance = 1000;
 let phase = "ready";
 let multiplier = 1;
 let crashAt = 0;
+
 let betAmount = 0;
+let bet1Placed = false;
 let cashedOut = false;
+
+let bet2Amount = 0;
+let bet2Placed = false;
+let cashedOut2 = false;
+
 let roundStartedAt = 0;
 let history = [];
 let animationFrame = null;
 let nextRoundTimer = null;
+let winTimer1 = null;
+let winTimer2 = null;
 
 function updateBalance() {
   $("balance").textContent =
@@ -702,44 +737,107 @@ function renderHistory() {
 
   history.forEach(value => {
     const item = document.createElement("span");
-
     item.className =
       "history-item " + (value >= 2 ? "high" : "low");
-
     item.textContent = value.toFixed(2) + "x";
     box.appendChild(item);
   });
 }
 
+function updateBetDisplay() {
+  const amount = Number($("bet").value);
+
+  $("betDisplay").textContent =
+    Number.isFinite(amount) && amount >= 1
+      ? amount.toLocaleString() + " coins"
+      : "Enter amount";
+}
+
+function updateBet2Display() {
+  const amount = Number($("bet2").value);
+
+  $("bet2Display").textContent =
+    Number.isFinite(amount) && amount >= 1
+      ? amount.toLocaleString() + " coins"
+      : "Enter amount";
+
+  $("play2Display").textContent =
+    Number.isFinite(amount) && amount >= 1
+      ? amount.toLocaleString() + " coins"
+      : "Enter amount";
+
+  $("bet2Payout").textContent =
+    bet2Placed && !cashedOut2
+      ? Math.floor(bet2Amount * multiplier).toLocaleString() +
+        " coins"
+      : "0 coins";
+}
+
 function setControls() {
   const running = phase === "running";
   const waiting = phase === "waiting";
+  const ready = phase === "ready";
 
-  $("play").disabled = running || waiting;
+  // PANEL 1
+  $("play").disabled = !ready || bet1Placed;
 
-  // Show Cash Out as soon as the flight starts.
-  $("cashout").hidden = !running && !waiting;
+  $("bet").disabled = !ready;
+  $("decreaseBet").disabled = !ready;
+  $("increaseBet").disabled = !ready;
+
+  $("cashout").hidden = !running || !bet1Placed || cashedOut;
   $("cashout").style.display =
-    running || waiting ? "flex" : "none";
+    running && bet1Placed && !cashedOut ? "flex" : "none";
 
-  $("cashout").disabled = !running || cashedOut;
+  $("cashout").disabled =
+    !running || !bet1Placed || cashedOut;
 
-  if (waiting) {
-    $("cashoutLabel").textContent = "Round ended";
-    $("cashoutValue").textContent = "Waiting for next round";
-  } else if (running && cashedOut) {
-    $("cashoutLabel").textContent = "Cashed Out";
-  } else if (running) {
+  if (cashedOut) {
+    $("cashoutLabel").textContent = "CASHED OUT";
+  } else if (running && bet1Placed) {
     $("cashoutLabel").textContent =
       "CASH OUT · " + multiplier.toFixed(2) + "x";
+  } else if (waiting) {
+    $("cashoutLabel").textContent = "Round ended";
   } else {
     $("cashoutLabel").textContent = "CASH OUT";
     $("cashoutValue").textContent = "0 coins";
   }
 
-  $("bet").disabled = running || waiting;
-  $("autoTarget").disabled = running || waiting;
-    }
+  // PANEL 2
+  $("play2").disabled =
+    waiting || bet2Placed || (!ready && !running);
+
+  $("bet2").disabled = !ready;
+  $("decreaseBet2").disabled = !ready;
+  $("increaseBet2").disabled = !ready;
+
+  $("cashout2").hidden =
+    !running || !bet2Placed || cashedOut2;
+
+  $("cashout2").style.display =
+    running && bet2Placed && !cashedOut2 ? "flex" : "none";
+
+  $("cashout2").disabled =
+    !running || !bet2Placed || cashedOut2;
+
+  if (cashedOut2) {
+    $("cashoutLabel2").textContent = "CASHED OUT 2";
+  } else if (running && bet2Placed) {
+    $("cashoutLabel2").textContent =
+      "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
+  } else {
+    $("cashoutLabel2").textContent = "CASH OUT 2";
+  }
+
+  // Auto settings belong to Panel 1.
+  $("autoTarget").disabled = !ready;
+  $("autoBet").disabled = waiting;
+  $("autoCash").disabled = waiting;
+
+  updateBet2Display();
+}
+
 function resetFlight() {
   $("plane").textContent = "✈️";
   $("plane").style.left = "8%";
@@ -754,7 +852,7 @@ function resetFlight() {
 }
 
 function placeBet() {
-  if (phase !== "ready") return;
+  if (phase !== "ready" || bet1Placed) return;
 
   const amount = Number($("bet").value);
 
@@ -766,24 +864,67 @@ function placeBet() {
 
   if (amount > balance) {
     $("result").textContent =
-      "You do not have enough virtual coins.";
+      "Not enough virtual coins for Bet 1.";
     return;
   }
 
   betAmount = amount;
-  balance -= betAmount;
+  bet1Placed = true;
+  cashedOut = false;
 
+  balance -= amount;
   updateBalance();
   saveGame();
+
+  $("result").textContent = "Bet 1 placed! Flight starting.";
   startRound();
 }
 
+function placeBet2() {
+  if (
+    (phase !== "ready" && phase !== "running") ||
+    bet2Placed
+  ) return;
+
+  const amount = Number($("bet2").value);
+
+  if (!Number.isInteger(amount) || amount < 1) {
+    $("bet2Status").textContent =
+      "Enter a whole-number Bet 2 amount.";
+    return;
+  }
+
+  if (amount > balance) {
+    $("bet2Status").textContent =
+      "Not enough virtual coins for Bet 2.";
+    return;
+  }
+
+  bet2Amount = amount;
+  bet2Placed = true;
+  cashedOut2 = false;
+
+  balance -= amount;
+  updateBalance();
+  saveGame();
+
+  $("bet2Status").textContent =
+    "Bet 2 placed · " +
+    amount.toLocaleString() + " coins";
+
+  if (phase === "ready") {
+    startRound();
+  } else {
+    setControls();
+  }
+}
+
 function startRound() {
+  if (phase !== "ready") return;
+
   phase = "running";
   multiplier = 1;
-  cashedOut = false;
 
-  // Demo-only random crash point.
   const random = Math.random();
 
   crashAt = Math.max(
@@ -796,11 +937,11 @@ function startRound() {
   resetFlight();
 
   $("result").textContent =
-    "Round started! Cash out before the crash.";
+    "Round started! Cash out either bet before the crash.";
 
   $("status").textContent = "🚀 Flying...";
-  setControls();
 
+  setControls();
   animationFrame = requestAnimationFrame(tick);
 }
 
@@ -810,100 +951,155 @@ function tick(now) {
   const elapsed = (now - roundStartedAt) / 1000;
   multiplier = Math.exp(elapsed * 0.22);
 
-  // Update the multiplier display.
   $("multiplier").textContent =
     multiplier.toFixed(2) + "x";
 
-  // Update the potential cash-out payout continuously.
-  if (!cashedOut) {
-    const potentialPayout = Math.floor(
-      betAmount * multiplier
-    );
-
+  // Update Panel 1's potential payout.
+  if (bet1Placed && !cashedOut) {
     $("cashoutLabel").textContent =
       "CASH OUT · " + multiplier.toFixed(2) + "x";
 
     $("cashoutValue").textContent =
-      potentialPayout.toLocaleString() + " coins";
+      Math.floor(betAmount * multiplier).toLocaleString() +
+      " coins";
   }
 
-  // Check whether the plane has crashed.
+  // Update Panel 2's potential payout.
+  if (bet2Placed && !cashedOut2) {
+    $("cashoutLabel2").textContent =
+      "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
+
+    $("cashoutValue2").textContent =
+      Math.floor(bet2Amount * multiplier).toLocaleString() +
+      " coins";
+
+    $("bet2Payout").textContent =
+      Math.floor(bet2Amount * multiplier).toLocaleString() +
+      " coins";
+  }
+
   if (multiplier >= crashAt) {
     multiplier = crashAt;
-
     $("multiplier").textContent =
       multiplier.toFixed(2) + "x";
-
     finishCrash();
     return;
   }
 
-  // Move the plane along its flight path.
-  const progress = Math.min(
-    1,
-    (multiplier - 1) / 8
-  );
-
+  const progress = Math.min(1, (multiplier - 1) / 8);
   const left = 8 + progress * 77;
   const bottom = 20 + progress * 145;
 
   $("plane").style.left = left + "%";
   $("plane").style.bottom = bottom + "px";
 
-  // Extend the flight trail.
-  $("trail").style.width =
-    Math.max(0, left - 8) + "%";
+  $("trail").style.width = Math.max(0, left - 8) + "%";
 
-  // Trigger automatic cash-out if enabled.
+  // Auto Cash-Out applies to Panel 1.
   if (
     $("autoCash").checked &&
+    bet1Placed &&
     !cashedOut &&
     multiplier >= Number($("autoTarget").value)
   ) {
     cashOut();
   }
 
-  // Continue the animation.
   animationFrame = requestAnimationFrame(tick);
 }
-    
 
-    function cashOut() {
-  if (phase !== "running" || cashedOut) return;
+function cashOut() {
+  if (
+    phase !== "running" ||
+    !bet1Placed ||
+    cashedOut
+  ) return;
 
   cashedOut = true;
 
   const payout = Math.floor(betAmount * multiplier);
 
-  // Show the win notification.
-  $("win-title").textContent = "You have cashed out!";
+  $("win-title").textContent = "Bet 1 cashed out!";
   $("win-multiplier").textContent =
     multiplier.toFixed(2) + "x";
   $("win-payout").textContent =
     payout.toLocaleString() + " coins";
-  $("win-notification").hidden = false;
-      // Automatically close the winning notification after 1 second.
-setTimeout(() => {
-  $("win-notification").hidden = true;
-}, 1000);
 
-  // Add the virtual winnings to the balance.
+  $("win-notification").hidden = false;
+
+  if (winTimer1 !== null) clearTimeout(winTimer1);
+
+  winTimer1 = setTimeout(() => {
+    $("win-notification").hidden = true;
+    winTimer1 = null;
+  }, 1000);
+
   balance += payout;
   updateBalance();
   saveGame();
 
-  $("cashoutLabel").textContent =
-    "CASHED OUT · " + multiplier.toFixed(2) + "x";
+  $("cashoutLabel").textContent = "CASHED OUT";
   $("cashoutValue").textContent =
     payout.toLocaleString() + " coins";
 
   $("result").textContent =
-    "Cashed out at " + multiplier.toFixed(2) +
-    "x. Virtual payout: " + payout + " coins.";
+    "Bet 1 cashed out at " + multiplier.toFixed(2) +
+    "x. Payout: " + payout.toLocaleString() + " coins.";
 
   $("result").style.color = "var(--green)";
-  $("status").textContent = "✓ CASHED OUT";
-  $("cashout").disabled = true;
+  $("status").textContent = "✓ BET 1 CASHED OUT";
+
+  setControls();
+}
+
+function cashOut2() {
+  if (
+    phase !== "running" ||
+    !bet2Placed ||
+    cashedOut2
+  ) return;
+
+  cashedOut2 = true;
+
+  const payout = Math.floor(bet2Amount * multiplier);
+
+  $("win-title-2").textContent = "Bet 2 cashed out!";
+  $("win-multiplier-2").textContent =
+    multiplier.toFixed(2) + "x";
+  $("win-payout-2").textContent =
+    payout.toLocaleString() + " coins";
+
+  $("win-notification-2").hidden = false;
+
+  if (winTimer2 !== null) clearTimeout(winTimer2);
+
+  winTimer2 = setTimeout(() => {
+    $("win-notification-2").hidden = true;
+    winTimer2 = null;
+  }, 1000);
+
+  balance += payout;
+  updateBalance();
+  saveGame();
+
+  $("cashoutLabel2").textContent = "CASHED OUT 2";
+  $("cashoutValue2").textContent =
+    payout.toLocaleString() + " coins";
+
+  $("bet2Payout").textContent =
+    payout.toLocaleString() + " coins";
+
+  $("bet2Status").textContent =
+    "Cashed out at " + multiplier.toFixed(2) +
+    "x · Won " + payout.toLocaleString() + " coins";
+
+  $("result").textContent =
+    "Bet 2 cashed out at " + multiplier.toFixed(2) +
+    "x. Payout: " + payout.toLocaleString() + " coins.";
+
+  $("result").style.color = "var(--green)";
+
+  setControls();
 }
 
 function finishCrash() {
@@ -923,17 +1119,28 @@ function finishCrash() {
 
   history.unshift(crashAt);
   history = history.slice(0, 12);
-
   renderHistory();
 
-  if (!cashedOut) {
+  const losses = [];
+
+  if (bet1Placed && !cashedOut) {
+    losses.push("Bet 1 lost " + betAmount + " coins");
+  }
+
+  if (bet2Placed && !cashedOut2) {
+    losses.push("Bet 2 lost " + bet2Amount + " coins");
+    $("bet2Status").textContent =
+      "Crashed! Bet 2 lost " + bet2Amount + " coins.";
+  }
+
+  if (losses.length > 0) {
     $("result").textContent =
-      "Crashed at " + crashAt.toFixed(2) +
-      "x. You lost " + betAmount + " virtual coins.";
+      "Crashed at " + crashAt.toFixed(2) + "x. " +
+      losses.join(". ") + ".";
     $("result").style.color = "var(--red)";
   } else {
-    $("result").textContent +=
-      " Round ended at " + crashAt.toFixed(2) + "x.";
+    $("result").textContent =
+      "Round ended at " + crashAt.toFixed(2) + "x.";
   }
 
   saveGame();
@@ -941,72 +1148,102 @@ function finishCrash() {
 
   nextRoundTimer = setTimeout(() => {
     phase = "ready";
+
+    bet1Placed = false;
+    cashedOut = false;
+    betAmount = 0;
+
+    bet2Placed = false;
+    cashedOut2 = false;
+    bet2Amount = 0;
+
+    $("bet2Status").textContent = "Ready for takeoff";
+    $("bet2Payout").textContent = "0 coins";
+
     resetFlight();
 
     $("result").style.color = "var(--green)";
     $("status").textContent = "Ready for takeoff";
 
     setControls();
+    nextRoundTimer = null;
 
     if ($("autoBet").checked) {
       placeBet();
     }
   }, 2500);
-    }
-  // Update the amount displayed on the Bet button.
-function updateBetDisplay() {
-  const amount = Number($("bet").value);
-
-  $("betDisplay").textContent =
-    Number.isFinite(amount) && amount >= 1
-      ? amount.toLocaleString() + " coins"
-      : "Enter amount";
 }
 
-// Decrease bet.
-$("decreaseBet").onclick = function () {
-  const current = Number($("bet").value) || 1;
-  $("bet").value = Math.max(1, current - 10);
+// PANEL 1 AMOUNT CONTROLS
+$("decreaseBet").onclick = () => {
+  $("bet").value = Math.max(
+    1, (Number($("bet").value) || 1) - 10
+  );
   updateBetDisplay();
 };
 
-// Increase bet.
-$("increaseBet").onclick = function () {
-  const current = Number($("bet").value) || 0;
-  $("bet").value = Math.floor(current + 10);
+$("increaseBet").onclick = () => {
+  $("bet").value = Math.max(
+    1, (Number($("bet").value) || 0) + 10
+  );
   updateBetDisplay();
 };
 
-// Quick bet buttons.
-document.querySelectorAll("[data-bet]").forEach(function (button) {
-  button.onclick = function () {
+document.querySelectorAll("[data-bet]").forEach(button => {
+  button.onclick = () => {
     $("bet").value = button.dataset.bet;
     updateBetDisplay();
   };
 });
 
-// Manual bet input.
 $("bet").oninput = updateBetDisplay;
 
-// Bet and Auto tabs.
-$("manualTab").onclick = function () {
+// PANEL 2 AMOUNT CONTROLS
+$("decreaseBet2").onclick = () => {
+  $("bet2").value = Math.max(
+    1, (Number($("bet2").value) || 1) - 10
+  );
+  updateBet2Display();
+};
+
+$("increaseBet2").onclick = () => {
+  $("bet2").value = Math.max(
+    1, (Number($("bet2").value) || 0) + 10
+  );
+  updateBet2Display();
+};
+
+document.querySelectorAll("[data-bet2]").forEach(button => {
+  button.onclick = () => {
+    $("bet2").value = button.dataset.bet2;
+    updateBet2Display();
+  };
+});
+
+$("bet2").oninput = updateBet2Display;
+
+// BET AND AUTO TABS
+$("manualTab").onclick = () => {
   $("manualTab").classList.add("active");
   $("autoTab").classList.remove("active");
   $("autoSettings").hidden = true;
 };
 
-$("autoTab").onclick = function () {
+$("autoTab").onclick = () => {
   $("autoTab").classList.add("active");
   $("manualTab").classList.remove("active");
   $("autoSettings").hidden = false;
 };
 
-// Main game buttons.
+// GAME BUTTONS
 $("play").onclick = placeBet;
 $("cashout").onclick = cashOut;
 
-// Auto Bet.
-$("autoBet").onchange = function () {
+$("play2").onclick = placeBet2;
+$("cashout2").onclick = cashOut2;
+
+// AUTO BET: Panel 1 only
+$("autoBet").onchange = () => {
   setControls();
 
   if ($("autoBet").checked && phase === "ready") {
@@ -1014,8 +1251,8 @@ $("autoBet").onchange = function () {
   }
 };
 
-// Auto Cash-Out.
-$("autoCash").onchange = function () {
+// AUTO CASH-OUT: Panel 1 only
+$("autoCash").onchange = () => {
   if (!$("autoCash").checked) return;
 
   const target = Number($("autoTarget").value);
@@ -1027,8 +1264,8 @@ $("autoCash").onchange = function () {
   }
 };
 
-// Initialize the amount display.
 updateBetDisplay();
+updateBet2Display();
 
 window.addEventListener("pagehide", () => {
   if (animationFrame !== null) {
@@ -1038,15 +1275,15 @@ window.addEventListener("pagehide", () => {
   if (nextRoundTimer !== null) {
     clearTimeout(nextRoundTimer);
   }
+
+  if (winTimer1 !== null) clearTimeout(winTimer1);
+  if (winTimer2 !== null) clearTimeout(winTimer2);
 });
 
-// ONE-TIME DEMO BALANCE RESET
-localStorage.removeItem("skycrash-demo");
-
+// Load saved virtual balance and history.
 loadGame();
 resetFlight();
 setControls();
-</script>
-
+  </script>
 </body>
 </html>
