@@ -1458,8 +1458,7 @@ function tick(now) {
       "CASH OUT · " + multiplier.toFixed(2) + "x";
 
     $("cashoutValue").textContent =
-      Math.floor(betAmount * multiplier).toLocaleString() +
-      " coins";
+formatKSh(betAmount * multiplier);
   }
 
   // Update Panel 2's potential payout.
@@ -1468,12 +1467,10 @@ function tick(now) {
       "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
 
     $("cashoutValue2").textContent =
-      Math.floor(bet2Amount * multiplier).toLocaleString() +
-      " coins";
+formatKSh(bet2Amount * multiplier);
 
-    $("bet2Payout").textContent =
-      Math.floor(bet2Amount * multiplier).toLocaleString() +
-      " coins";
+$("bet2Payout").textContent =
+formatKSh(bet2Amount * multiplier);
   }
 
   if (multiplier >= crashAt) {
