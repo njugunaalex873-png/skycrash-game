@@ -314,16 +314,19 @@ h3 {
     </div>
 
     <div class="bet-actions">
-      <button id="play" class="green-button" type="button">
-        <span id="playLabel">Bet</span>
-        <strong id="betDisplay">50 coins</strong>
-      </button>
+    <div class="bet-actions">
 
-      <button id="cashout" class="red-button" type="button" disabled>
-        CASH OUT
-      </button>
+  <button id="cashout" class="red-button" type="button" disabled>
+    <span id="cashoutLabel">CASH OUT</span>
+    <strong id="cashoutValue">0 coins</strong>
+  </button>
+
+  <button id="play" class="green-button" type="button">
+    <span id="playLabel">BET</span>
+    <strong id="betDisplay">50 coins</strong>
+  </button>
+
     </div>
-  </div>
 
   <p class="note">Demo game · Virtual coins only</p>
 </section>
@@ -438,7 +441,7 @@ function setControls() {
 
   $("bet").disabled = running || waiting;
   $("autoTarget").disabled = running || waiting;
-      }
+  }
 
 function resetFlight() {
   $("plane").textContent = "✈️";
@@ -514,6 +517,16 @@ function tick(now) {
     multiplier = crashAt;
     $("multiplier").textContent =
       multiplier.toFixed(2) + "x";
+    // Show the current potential payout while the plane is flying.
+if (!cashedOut) {
+  const potentialPayout = Math.floor(betAmount * multiplier);
+
+  $("cashoutLabel").textContent =
+    "CASH OUT · " + multiplier.toFixed(2) + "x";
+
+  $("cashoutValue").textContent =
+    potentialPayout.toLocaleString() + " coins";
+  }
     finishCrash();
     return;
   }
@@ -552,6 +565,11 @@ function cashOut() {
   cashedOut = true;
 
   const payout = Math.floor(betAmount * multiplier);
+  $("cashoutLabel").textContent =
+  "CASHED OUT · " + multiplier.toFixed(2) + "x";
+
+$("cashoutValue").textContent =
+  payout.toLocaleString() + " coins";
   balance += payout;
 
   updateBalance();
