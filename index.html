@@ -962,7 +962,24 @@ function updateBalance() {
   $("balance").textContent =
     Math.floor(balance).toLocaleString();
 }
+function resetCoins() {
+if (phase === "running" || phase === "waiting") {
+alert("You cannot reset coins while a round is in progress.");
+return;
+}
 
+if (!confirm("Reset your virtual coins to 50,000?")) {
+return;
+}
+
+balance = 50000;
+
+updateBalance();
+saveGame();
+
+$("result").textContent = "Virtual coins reset to 50,000!";
+$("result").style.color = "var(--green)";
+}
 function saveGame() {
   try {
     localStorage.setItem(
@@ -1640,6 +1657,8 @@ $("play2").onclick = () => {
   }
 };
 $("cashout2").onclick = cashOut2;
+  // RESET VIRTUAL COINS
+$("reset").onclick = resetCoins;
 
 // AUTO BET: Panel 1 only
 $("autoBet").onchange = () => {
