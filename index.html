@@ -1508,7 +1508,8 @@ function cashOut() {
   ) return;
 
   cashedOut = true;
-
+  skySound.play("cashout");
+  
   const payout = Math.floor(betAmount * multiplier);
 
   $("win-title").textContent = "Bet 1 cashed out!";
@@ -1552,7 +1553,8 @@ function cashOut2() {
   ) return;
 
   cashedOut2 = true;
-
+  skySound.play("cashout");
+  
   const payout = Math.floor(bet2Amount * multiplier);
 
   $("win-title-2").textContent = "Bet 2 cashed out!";
