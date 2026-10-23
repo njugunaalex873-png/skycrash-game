@@ -243,6 +243,217 @@ main {
 }
 
 /* Labels */
+/* ==========================================
+   REFERENCE-INSPIRED BETTING CONTROLS
+   ========================================== */
+
+.betting-card {
+  padding: 14px;
+  border-radius: 30px;
+}
+
+.bet-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 76%;
+  max-width: 310px;
+  margin: 0 auto 16px;
+  padding: 5px;
+  border-radius: 30px;
+  background: #111113;
+}
+
+.bet-tab {
+  min-height: 42px;
+  padding: 8px;
+  border-radius: 25px;
+  background: transparent;
+  color: #a0a0a5;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.bet-tab.active {
+  background: #303034;
+  color: #ffffff;
+}
+
+.bet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.bet-settings {
+  min-width: 0;
+}
+
+.amount-control {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
+  padding: 4px;
+  border-radius: 30px;
+  background: #111113;
+}
+
+.amount-control button {
+  min-height: 38px;
+  padding: 4px;
+  border-radius: 50%;
+  background: #303034;
+  color: #ffffff;
+  font-size: 23px;
+}
+
+.amount-control input {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  margin: 0;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.quick-bets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.quick-bets button {
+  min-height: 38px;
+  padding: 5px 3px;
+  border-radius: 24px;
+  background: #111113;
+  color: #d0d0d3;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.bet-actions {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bet-actions .green-button,
+.bet-actions .red-button {
+  flex: 1;
+  width: 100%;
+  min-height: 105px;
+  padding: 10px 5px;
+  border-radius: 24px;
+  font-size: 20px;
+}
+
+.bet-actions .green-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #22a900;
+  color: #ffffff;
+  border: 2px solid #83e66c;
+}
+
+#betDisplay {
+  font-size: 17px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.bet-actions .red-button {
+  min-height: 48px;
+  background: #d7193f;
+  font-size: 15px;
+}
+
+.auto-settings {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #111113;
+}
+
+.auto-settings[hidden] {
+  display: none !important;
+}
+
+.auto-settings > label:not(.auto-check) {
+  display: block;
+  margin: 8px 0 5px;
+  color: #b5b5bb;
+  font-size: 11px;
+}
+
+.auto-settings > input {
+  min-height: 38px;
+  font-size: 14px;
+}
+
+.auto-settings .auto-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  color: #d0d0d3;
+  font-size: 12px;
+}
+
+.auto-settings .auto-check input {
+  width: 17px;
+  min-height: 17px;
+  margin: 0;
+  accent-color: #22a900;
+}
+
+.betting-card > .note {
+  margin-top: 12px;
+}
+
+@media (max-width: 360px) {
+  .bet-layout {
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    gap: 7px;
+  }
+
+  .amount-control {
+    grid-template-columns: 30px minmax(0, 1fr) 30px;
+    gap: 2px;
+  }
+
+  .amount-control button {
+    min-height: 30px;
+    font-size: 19px;
+  }
+
+  .amount-control input {
+    font-size: 14px;
+  }
+
+  .quick-bets button {
+    font-size: 11px;
+  }
+
+  .bet-actions .green-button {
+    font-size: 17px;
+  }
+
+  #betDisplay {
+    font-size: 14px;
+  }
+}
 
 .controls .label {
   min-height: 14px;
