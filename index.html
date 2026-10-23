@@ -609,8 +609,56 @@ function finishCrash() {
       placeBet();
     }
   }, 2500);
+  }
+  
+// Update the amount displayed on the Bet button.
+function updateBetDisplay() {
+  const amount = Number($("bet").value);
+  $("betDisplay").textContent =
+    Number.isFinite(amount) && amount >= 0
+      ? amount.toLocaleString() + " coins"
+      : "Enter amount";
 }
 
+// Increase or decrease the virtual bet.
+$("decreaseBet").addEventListener("click", () => {
+  const current = Number($("bet").value) || 1;
+  $("bet").value = Math.max(1, current - 10);
+  updateBetDisplay();
+});
+
+$("increaseBet").addEventListener("click", () => {
+  const current = Number($("bet").value) || 0;
+  $("bet").value = Math.floor(current + 10);
+  updateBetDisplay();
+});
+
+// Quick bet amount buttons.
+document.querySelectorAll("[data-bet]").forEach(button => {
+  button.addEventListener("click", () => {
+    $("bet").value = button.dataset.bet;
+    updateBetDisplay();
+  });
+});
+
+// Keep the displayed amount synchronized with manual input.
+$("bet").addEventListener("input", updateBetDisplay);
+
+// Switch between Bet and Auto views.
+$("manualTab").addEventListener("click", () => {
+  $("manualTab").classList.add("active");
+  $("autoTab").classList.remove("active");
+  $("autoSettings").hidden = true;
+});
+
+$("autoTab").addEventListener("click", () => {
+  $("autoTab").classList.add("active");
+  $("manualTab").classList.remove("active");
+  $("autoSettings").hidden = false;
+});
+
+// Initialize the displayed amount.
+updateBetDisplay();
 $("play").addEventListener("click", placeBet);
 $("cashout").addEventListener("click", cashOut);
 
