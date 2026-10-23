@@ -696,6 +696,8 @@ window.addEventListener("pagehide", () => {
 });
 
 // ONE-TIME DEMO BALANCE RESET
+localStorage.removeItem("skycrash-demo");
+
 loadGame();
 resetFlight();
 setControls();
