@@ -432,10 +432,13 @@ function setControls() {
   const waiting = phase === "waiting";
 
   $("play").disabled = running || waiting;
+
   $("cashout").disabled = !running || cashedOut;
+  $("cashout").style.display = running ? "block" : "none";
+
   $("bet").disabled = running || waiting;
   $("autoTarget").disabled = running || waiting;
-}
+      }
 
 function resetFlight() {
   $("plane").textContent = "✈️";
@@ -692,6 +695,7 @@ window.addEventListener("pagehide", () => {
   }
 });
 
+// ONE-TIME DEMO BALANCE RESET
 loadGame();
 resetFlight();
 setControls();
