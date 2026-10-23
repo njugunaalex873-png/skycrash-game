@@ -800,6 +800,10 @@ function tick(now) {
   $("win-payout").textContent =
     payout.toLocaleString() + " coins";
   $("win-notification").hidden = false;
+      // Automatically close the winning notification after 1 second.
+setTimeout(() => {
+  $("win-notification").hidden = true;
+}, 1000);
 
   // Add the virtual winnings to the balance.
   balance += payout;
