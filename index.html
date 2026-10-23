@@ -434,15 +434,29 @@ function setControls() {
   const running = phase === "running";
   const waiting = phase === "waiting";
 
+  // Bet button is unavailable during a round or between rounds.
   $("play").disabled = running || waiting;
 
-  $("cashout").disabled = !running || cashedOut;
-  $("cashout").style.display = running ? "block" : "none";
+  // Show Cash Out immediately when the flight starts.
+  // Keep it visible while waiting for the next round.
+  $("cashout").style.display =
+    running || waiting ? "block" : "none";
 
+  // Cash Out only works while flying and before cashing out.
+  $("cashout").disabled = !running || cashedOut;
+
+  // Update the button text for each game state.
+  if (waiting) {
+    $("cashoutLabel").textContent = "Cancel";
+    $("cashoutValue").textContent = "Waiting for next round";
+  } else if (running && cashedOut) {
+    $("cashoutLabel").textContent = "Cashed Out";
+  }
+
+  // Prevent bet settings from changing during a round.
   $("bet").disabled = running || waiting;
   $("autoTarget").disabled = running || waiting;
   }
-
 function resetFlight() {
   $("plane").textContent = "✈️";
   $("plane").style.left = "8%";
@@ -513,27 +527,35 @@ function tick(now) {
   const elapsed = (now - roundStartedAt) / 1000;
   multiplier = Math.exp(elapsed * 0.22);
 
+  // Update the multiplier display.
+  $("multiplier").textContent =
+    multiplier.toFixed(2) + "x";
+
+  // Update the potential cash-out payout continuously.
+  if (!cashedOut) {
+    const potentialPayout = Math.floor(
+      betAmount * multiplier
+    );
+
+    $("cashoutLabel").textContent =
+      "CASH OUT · " + multiplier.toFixed(2) + "x";
+
+    $("cashoutValue").textContent =
+      potentialPayout.toLocaleString() + " coins";
+  }
+
+  // Check whether the plane has crashed.
   if (multiplier >= crashAt) {
     multiplier = crashAt;
+
     $("multiplier").textContent =
       multiplier.toFixed(2) + "x";
-    // Show the current potential payout while the plane is flying.
-if (!cashedOut) {
-  const potentialPayout = Math.floor(betAmount * multiplier);
 
-  $("cashoutLabel").textContent =
-    "CASH OUT · " + multiplier.toFixed(2) + "x";
-
-  $("cashoutValue").textContent =
-    potentialPayout.toLocaleString() + " coins";
-  }
     finishCrash();
     return;
   }
 
-  $("multiplier").textContent =
-    multiplier.toFixed(2) + "x";
-
+  // Move the plane along its flight path.
   const progress = Math.min(
     1,
     (multiplier - 1) / 8
@@ -545,9 +567,11 @@ if (!cashedOut) {
   $("plane").style.left = left + "%";
   $("plane").style.bottom = bottom + "px";
 
+  // Extend the flight trail.
   $("trail").style.width =
     Math.max(0, left - 8) + "%";
 
+  // Trigger automatic cash-out if enabled.
   if (
     $("autoCash").checked &&
     !cashedOut &&
@@ -556,9 +580,10 @@ if (!cashedOut) {
     cashOut();
   }
 
+  // Continue the animation.
   animationFrame = requestAnimationFrame(tick);
 }
-
+    
 function cashOut() {
   if (phase !== "running" || cashedOut) return;
 
