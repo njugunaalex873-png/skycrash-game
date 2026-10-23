@@ -423,6 +423,29 @@ h3 {
     min-height: 70px;
   }
   }
+  /* SECOND BETTING PANEL */
+#secondBettingCard {
+  margin-top: 16px;
+}
+
+#secondBettingCard .label {
+  margin-bottom: 14px;
+}
+
+#secondBettingCard #bet2Payout {
+  color: #35df91;
+}
+
+#secondBettingCard #bet2Status {
+  text-align: center;
+  font-size: 12px;
+  color: #9eb1c7;
+}
+
+#secondBettingCard button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 </style>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -476,6 +499,7 @@ h3 {
       Auto
     </button>
   </div>
+  
 
   <div class="bet-layout">
     <div class="bet-settings">
@@ -524,7 +548,70 @@ h3 {
   <p class="note">Demo game · Virtual coins only</p>
 </section>
 
+<!-- SECOND BETTING PANEL -->
+<section class="card betting-card" id="secondBettingCard">
+  <div class="label">BET PANEL 2</div>
 
+  <div class="bet-layout">
+    <div class="bet-settings">
+      <label class="amount-control">
+        <button type="button" id="decreaseBet2">−</button>
+
+        <input
+          id="bet2"
+          type="number"
+          value="50"
+          min="1"
+          step="1"
+        >
+
+        <button type="button" id="increaseBet2">+</button>
+      </label>
+
+      <div class="quick-bets">
+        <button type="button" data-bet2="100">100</button>
+        <button type="button" data-bet2="250">250</button>
+        <button type="button" data-bet2="1000">1,000</button>
+        <button type="button" data-bet2="25000">25,000</button>
+      </div>
+
+      <p class="note">
+        Bet 2 stake: <strong id="bet2Display">50 coins</strong>
+      </p>
+
+      <p class="note">
+        Potential payout:
+        <strong id="bet2Payout">0 coins</strong>
+      </p>
+    </div>
+
+    <div class="bet-actions">
+      <button
+        id="cashout2"
+        class="red-button"
+        type="button"
+        disabled
+        hidden
+      >
+        <span id="cashoutLabel2">CASH OUT 2</span>
+        <strong id="cashoutValue2">0 coins</strong>
+      </button>
+
+      <button
+        id="play2"
+        class="green-button"
+        type="button"
+      >
+        <span>BET 2</span>
+        <strong id="play2Display">50 coins</strong>
+      </button>
+    </div>
+  </div>
+
+  <p class="note" id="bet2Status">
+    Ready for takeoff · Virtual coins only
+  </p>
+</section>
 <section class="card">
   <h3>📊 Recent Crashes</h3>
   <div id="history" class="history">
