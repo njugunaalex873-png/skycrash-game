@@ -1533,7 +1533,7 @@ function cashOut() {
   $("win-multiplier").textContent =
     multiplier.toFixed(2) + "x";
   $("win-payout").textContent =
-    payout.toLocaleString() + " coins";
+  formatKSh(payout);
 
   $("win-notification").hidden = false;
 
@@ -1553,8 +1553,8 @@ function cashOut() {
     formatKSh(payout)
 
   $("result").textContent =
-    "Bet 1 cashed out at " + multiplier.toFixed(2) +
-    "x. Payout: " + payout.toLocaleString() + " coins.";
+  "Bet 1 cashed out at " + multiplier.toFixed(2) +
+  "x. Payout: " + formatKSh(payout) + ".";
 
   $("result").style.color = "var(--green)";
   $("status").textContent = "✓ BET 1 CASHED OUT";
@@ -1578,8 +1578,7 @@ function cashOut2() {
   $("win-multiplier-2").textContent =
     multiplier.toFixed(2) + "x";
   $("win-payout-2").textContent =
-    payout.toLocaleString() + " coins";
-
+  formatKSh(payout);
   $("win-notification-2").hidden = false;
 
   if (winTimer2 !== null) clearTimeout(winTimer2);
@@ -1595,10 +1594,10 @@ function cashOut2() {
 
   $("cashoutLabel2").textContent = "CASHED OUT 2";
   $("cashoutValue2").textContent =
-    payout.toLocaleString() + " coins";
+  formatKSh(payout);
 
   $("bet2Payout").textContent =
-    payout.toLocaleString() + " coins";
+  formatKSh(payout);
 
   $("bet2Status").textContent =
     "Cashed out at " + multiplier.toFixed(2) +
