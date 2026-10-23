@@ -368,3 +368,12 @@ button,
     padding: 13px;
   }
   }
+/* TEMPORARY TEST */
+body {
+  background: #090b14 !important;
+  color: #ffffff !important;
+}
+
+.card {
+  border: 2px solid #a855f7 !important;
+}
