@@ -1402,37 +1402,45 @@ async function getServerGameMultiplier() {
     );
   }
 
-  return data;
-  }
-function startRound() {
+  async function startRound() {
   if (phase !== "ready") return;
 
   phase = "running";
   multiplier = 1;
 
-  const random = Math.random();
-
-  crashAt = Math.max(
-    1.01,
-    Math.min(100, 0.99 / (1 - random))
-  );
-
-  roundStartedAt = performance.now();
-
-  resetFlight();
-
-  $("result").textContent =
-    "Round started! Cash out either bet before the crash.";
-
-  $("status").textContent = "🚀 Flying...";
-  skySound.play("flight");
-
+  $("result").textContent = "Connecting to SkyCrash server...";
+  $("status").textContent = "⏳ Connecting...";
   setControls();
-  animationFrame = requestAnimationFrame(tick);
-}
-  
-let bettingCountdownTimer = null;
-let bettingCountdown = 10;
+
+  try {
+    const data = await startServerGameRound();
+
+    if (data.status !== "running") {
+      throw new Error("The server round has not started. Please try again.");
+    }
+
+    serverRoundId = data.roundId;
+    crashAt = null;
+    roundStartedAt = performance.now();
+
+    resetFlight();
+
+    $("result").textContent =
+      "Round started! Cash out either bet before the crash.";
+
+    $("status").textContent = "🚀 Flying...";
+    skySound.play("flight");
+
+    setControls();
+    animationFrame = requestAnimationFrame(tick);
+  } catch (error) {
+    phase = "ready";
+    $("status").textContent = "⚠️ Server connection failed";
+    $("result").textContent =
+      error.message || "Could not connect. Please try again.";
+    setControls();
+  }
+  }
 
 
 function startBettingCountdown() {
