@@ -1421,8 +1421,10 @@ function startBettingCountdown() {
     bettingCountdown--;
 
     if (bettingCountdown > 0) {
-      $("status").textContent =
-        "⏳ Takeoff in " + bettingCountdown + " seconds";
+$("status").textContent =
+"⏳ Takeoff in " + bettingCountdown + " seconds";
+
+skySound.play("countdown");
     } else {
       clearInterval(bettingCountdownTimer);
       bettingCountdownTimer = null;
