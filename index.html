@@ -117,12 +117,18 @@ main {
 }
 
 #plane {
+
+#plane {
   position: absolute;
   left: 8%;
   bottom: 20px;
   font-size: 34px;
   z-index: 3;
+  transition: left 0.9s linear, bottom 0.9s linear;
+  will-change: left, bottom;
 }
+  
+
 
 #trail {
   position: absolute;
@@ -132,7 +138,9 @@ main {
   width: 0;
   background: var(--green);
   box-shadow: 0 0 12px var(--green);
+  transition: width 0.9s linear;
 }
+  
 
 input, button {
   width: 100%;
