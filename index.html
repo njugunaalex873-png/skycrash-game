@@ -1101,7 +1101,47 @@ window.addEventListener("unhandledrejection", function(event) {
     "Async error: " + event.reason;
   console.error("SkyCrash async error:", event.reason);
 });
-  
+  function smoothMultiplier(target) {
+  const display = $("multiplier");
+  if (!display) return;
+
+  if (multiplierAnimationFrame !== null) {
+    cancelAnimationFrame(multiplierAnimationFrame);
+  }
+
+  const start = displayedMultiplier;
+  const end = Number(target);
+
+  if (!Number.isFinite(end) || end < 1) return;
+
+  const duration = 250;
+  const startTime = performance.now();
+
+  function animate(now) {
+    const progress = Math.min(
+      1,
+      (now - startTime) / duration
+    );
+
+    displayedMultiplier =
+      start + (end - start) * progress;
+
+    display.textContent =
+      displayedMultiplier.toFixed(2) + "x";
+
+    if (progress < 1) {
+      multiplierAnimationFrame =
+        requestAnimationFrame(animate);
+    } else {
+      displayedMultiplier = end;
+      display.textContent = end.toFixed(2) + "x";
+      multiplierAnimationFrame = null;
+    }
+  }
+
+  multiplierAnimationFrame =
+    requestAnimationFrame(animate);
+    }
 
 async function syncRound() {
   if (syncBusy) return;
