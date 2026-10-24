@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -706,11 +707,9 @@ function updateDisplays() {
 }
 
 function setControls() {
-function setControls() {
   const ready = phase === "ready";
   const running = phase === "running";
 
-  // Allow betting only during the betting window.
   $("play").disabled = !(ready || (running && !bet1Placed));
   $("play2").disabled = !(ready || (running && !bet2Placed));
 
@@ -724,36 +723,24 @@ function setControls() {
 
   $("playLabel").textContent =
     bet1Placed ? (ready ? "CANCEL BET" : "BET PLACED") : "BET";
-
-  $("play").className =
-    bet1Placed ? "red-button" : "green-button";
+  $("play").className = bet1Placed ? "red-button" : "green-button";
 
   $("play2").querySelector("span").textContent =
-    bet2Placed
-      ? (ready ? "CANCEL BET 2" : "BET 2 PLACED")
-      : "BET 2";
+    bet2Placed ? (ready ? "CANCEL BET 2" : "BET 2 PLACED") : "BET 2";
+  $("play2").className = bet2Placed ? "red-button" : "green-button";
 
-  $("play2").className =
-    bet2Placed ? "red-button" : "green-button";
+  $("cashout").hidden = !(running && bet1Placed && !cashedOut);
+  $("cashout").disabled = !(running && bet1Placed && !cashedOut);
 
-  $("cashout").hidden =
-    !(running && bet1Placed && !cashedOut);
-
-  $("cashout").disabled =
-    !(running && bet1Placed && !cashedOut);
-
-  $("cashout2").hidden =
-    !(running && bet2Placed && !cashedOut2);
-
-  $("cashout2").disabled =
-    !(running && bet2Placed && !cashedOut2);
+  $("cashout2").hidden = !(running && bet2Placed && !cashedOut2);
+  $("cashout2").disabled = !(running && bet2Placed && !cashedOut2);
 
   $("autoTarget").disabled = !ready;
   $("autoBet").disabled = phase === "waiting";
   $("autoCash").disabled = phase === "waiting";
 
   updateDisplays();
-    }
+}
 
 function resetFlight() {
   $("plane").textContent = "✈️";
@@ -853,15 +840,22 @@ function cancelBet(which) {
 function cashOut(which) {
   const isFirst = which === 1;
 
-  if (phase !== "running") return;
+  if (phase !== "running") {
+    $("result").textContent = "Wait for the flight to start before cashing out.";
+    return;
+  }
+
   if (isFirst && (!bet1Placed || cashedOut)) return;
   if (!isFirst && (!bet2Placed || cashedOut2)) return;
 
   const amount = isFirst ? betAmount : bet2Amount;
   const payout = Math.floor(amount * multiplier);
 
-  if (isFirst) cashedOut = true;
-  else cashedOut2 = true;
+  if (isFirst) {
+    cashedOut = true;
+  } else {
+    cashedOut2 = true;
+  }
 
   balance += payout;
   updateBalance();
@@ -869,28 +863,443 @@ function cashOut(which) {
   sound.play("cashout");
 
   const suffix = isFirst ? "" : "-2";
+
   $("win-title" + suffix).textContent =
     isFirst ? "Bet 1 cashed out!" : "Bet 2 cashed out!";
-  $("win-multiplier" + suffix).textContent = multiplier.toFixed(2) + "x";
+
+  $("win-multiplier" + suffix).textContent =
+    multiplier.toFixed(2) + "x";
+
   $("win-payout" + suffix).textContent = money(payout);
 
   const notice = $("win-notification" + suffix);
   notice.hidden = false;
 
   const oldTimer = isFirst ? winTimer1 : winTimer2;
+
   if (oldTimer) clearTimeout(oldTimer);
 
   const timer = setTimeout(() => {
     notice.hidden = true;
-  }, 2200);
+  }, 2500);
 
-  if (isFirst) winTimer1 = timer;
-  else winTimer2 = timer;
+  if (isFirst) {
+    winTimer1 = timer;
+  } else {
+    winTimer2 = timer;
+    $("bet2Status").textContent =
+      "Cashed out at " + multiplier.toFixed(2) +
+      "x · Won " + money(payout);
+  }
 
   $("result").textContent =
     (isFirst ? "Bet 1" : "Bet 2") +
     " cashed out at " + multiplier.toFixed(2) +
     "x. Payout: " + money(payout) + ".";
 
-  if (!isFirst) {
-    $("bet2Status").textContent
+  setControls();
+}
+
+function finishCrash(value, roundId) {
+  if (phase !== "running") return;
+
+  if (
+    roundId !== undefined &&
+    roundId !== null &&
+    lastCrashRoundId === roundId
+  ) {
+    return;
+  }
+
+  lastCrashRoundId = roundId;
+  phase = "waiting";
+
+  crashAt = Number(value) || multiplier;
+
+  $("multiplier").textContent = crashAt.toFixed(2) + "x";
+  $("multiplier").style.color = "var(--red)";
+  $("plane").textContent = "💥";
+  $("status").textContent = "CRASH!";
+
+  $("trail").style.background = "var(--red)";
+  $("trail").style.boxShadow = "0 0 12px var(--red)";
+
+  history.unshift(crashAt);
+  history = history.slice(0, 12);
+
+  renderHistory();
+
+  const losses = [];
+
+  if (bet1Placed && !cashedOut) {
+    losses.push("Bet 1 lost " + money(betAmount));
+  }
+
+  if (bet2Placed && !cashedOut2) {
+    losses.push("Bet 2 lost " + money(bet2Amount));
+  }
+
+  $("result").textContent = losses.length
+    ? "Crashed at " + crashAt.toFixed(2) + "x. " +
+      losses.join(". ") + "."
+    : "Round ended at " + crashAt.toFixed(2) + "x.";
+
+  $("result").style.color = "var(--red)";
+
+  bet1Placed = false;
+  betAmount = 0;
+  cashedOut = false;
+
+  bet2Placed = false;
+  bet2Amount = 0;
+  cashedOut2 = false;
+
+  $("bet2Status").textContent = "Waiting for next round";
+
+  save();
+  setControls();
+}
+
+function animateFlight() {
+  if (phase !== "running") return;
+
+  const progress = Math.min(
+    1,
+    Math.max(0, (multiplier - 1) / 8)
+  );
+
+  const left = 8 + progress * 77;
+  const bottom = 20 + progress * 145;
+
+  $("plane").style.left = left + "%";
+  $("plane").style.bottom = bottom + "px";
+  $("trail").style.width = Math.max(0, left - 8) + "%";
+}
+
+async function syncRound() {
+  if (syncBusy) return;
+
+  syncBusy = true;
+
+  try {
+    const statusData = await getStatus();
+
+    if (!statusData || !statusData.roundId) {
+      phase = "waiting";
+
+      $("status").textContent = "Waiting for server round...";
+      $("result").textContent =
+        "Waiting for the game server to create a round.";
+
+      setControls();
+      return;
+    }
+
+    if (statusData.status === "running") {
+      if (serverRoundId !== statusData.roundId) {
+        serverRoundId = statusData.roundId;
+        phase = "running";
+        multiplier = 1;
+        crashAt = 0;
+
+        resetFlight();
+
+        $("status").textContent = "🚀 Flying...";
+        $("result").style.color = "var(--green)";
+        $("result").textContent = "Round in progress.";
+
+        sound.play("flight");
+        setControls();
+      } else {
+        phase = "running";
+      }
+
+      const data = await getMultiplier();
+
+      if (
+        data &&
+        data.roundId === serverRoundId &&
+        data.status === "running" &&
+        Number.isFinite(Number(data.multiplier))
+      ) {
+        multiplier = Number(data.multiplier);
+
+        $("multiplier").textContent =
+          multiplier.toFixed(2) + "x";
+
+        if (bet1Placed && !cashedOut) {
+          $("cashoutValue").textContent =
+            money(betAmount * multiplier);
+        }
+
+        if (bet2Placed && !cashedOut2) {
+          $("cashoutValue2").textContent =
+            money(bet2Amount * multiplier);
+        }
+
+        updateDisplays();
+        animateFlight();
+
+        const target = Number($("autoTarget").value);
+
+        if (
+          $("autoCash").checked &&
+          bet1Placed &&
+          !cashedOut &&
+          Number.isFinite(target) &&
+          target >= 1.01 &&
+          multiplier >= target
+        ) {
+          cashOut(1);
+        }
+      } else if (
+        data &&
+        data.roundId === serverRoundId &&
+        data.status === "crashed"
+      ) {
+        finishCrash(data.crashAt, serverRoundId);
+        sound.play("crash");
+      }
+
+      setControls();
+      return;
+    }
+
+    if (statusData.status === "crashed") {
+      if (
+        phase === "running" &&
+        serverRoundId === statusData.roundId
+      ) {
+        const data = await getMultiplier();
+
+        finishCrash(
+          data ? data.crashAt : multiplier,
+          statusData.roundId
+        );
+
+        sound.play("crash");
+      } else {
+        phase = "waiting";
+        $("status").textContent = "Waiting for next round...";
+        setControls();
+      }
+
+      return;
+    }
+
+    /*
+      The server is waiting for the next round.
+      Bets are enabled only when the server provides
+      a round that has not started yet.
+    */
+
+    if (serverRoundId !== statusData.roundId) {
+      serverRoundId = statusData.roundId;
+    }
+
+    phase = "ready";
+
+    $("status").textContent =
+      "Round waiting to start. Place your virtual bet.";
+
+    $("result").style.color = "var(--green)";
+
+    setControls();
+
+    if ($("autoBet").checked && !bet1Placed) {
+      placeBet(1);
+    }
+
+  } catch (error) {
+    $("status").textContent = "⚠️ Reconnecting...";
+
+    $("result").textContent =
+      "Could not reach the game server. Retrying automatically.";
+
+    console.error("SkyCrash server error:", error);
+
+  } finally {
+    syncBusy = false;
+  }
+}
+
+/* Bet amount buttons */
+
+function bindAmount(id, delta) {
+  $(id).onclick = function () {
+    const fieldId =
+      id === "decreaseBet" || id === "increaseBet"
+        ? "bet"
+        : "bet2";
+
+    const field = $(fieldId);
+
+    if (field.disabled) return;
+
+    field.value = Math.max(
+      1,
+      (Number(field.value) || 0) + delta
+    );
+
+    updateDisplays();
+  };
+}
+
+bindAmount("decreaseBet", -10);
+bindAmount("increaseBet", 10);
+
+bindAmount("decreaseBet2", -10);
+bindAmount("increaseBet2", 10);
+
+/* Quick bet buttons */
+
+document.querySelectorAll("[data-bet]").forEach(button => {
+  button.addEventListener("click", function () {
+    if ($("bet").disabled) return;
+
+    $("bet").value = this.dataset.bet;
+    updateDisplays();
+  });
+});
+
+document.querySelectorAll("[data-bet2]").forEach(button => {
+  button.addEventListener("click", function () {
+    if ($("bet2").disabled) return;
+
+    $("bet2").value = this.dataset.bet2;
+    updateDisplays();
+  });
+});
+
+/* Bet amount inputs */
+
+$("bet").addEventListener("input", updateDisplays);
+$("bet2").addEventListener("input", updateDisplays);
+
+/* Main bet buttons */
+
+$("play").addEventListener("click", function () {
+  if (bet1Placed) {
+    cancelBet(1);
+  } else {
+    placeBet(1);
+  }
+});
+
+$("play2").addEventListener("click", function () {
+  if (bet2Placed) {
+    cancelBet(2);
+  } else {
+    placeBet(2);
+  }
+});
+
+/* Cash-out buttons */
+
+$("cashout").addEventListener("click", function () {
+  cashOut(1);
+});
+
+$("cashout2").addEventListener("click", function () {
+  cashOut(2);
+});
+
+/* Reset virtual balance */
+
+$("resetCoinsButton").addEventListener("click", resetCoins);
+
+/* Manual and Auto tabs */
+
+$("manualTab").addEventListener("click", function () {
+  $("manualTab").classList.add("active");
+  $("autoTab").classList.remove("active");
+  $("autoSettings").hidden = true;
+});
+
+$("autoTab").addEventListener("click", function () {
+  $("autoTab").classList.add("active");
+  $("manualTab").classList.remove("active");
+  $("autoSettings").hidden = false;
+});
+
+/* Auto bet */
+
+$("autoBet").addEventListener("change", function () {
+  if (
+    this.checked &&
+    phase === "ready" &&
+    !bet1Placed
+  ) {
+    placeBet(1);
+  }
+});
+
+/* Auto cash-out validation */
+
+$("autoCash").addEventListener("change", function () {
+  const target = Number($("autoTarget").value);
+
+  if (
+    this.checked &&
+    (!Number.isFinite(target) || target < 1.01)
+  ) {
+    this.checked = false;
+
+    $("result").textContent =
+      "Set auto cash-out to at least 1.01x.";
+  }
+});
+
+/* Sound toggle */
+
+$("sound-toggle").addEventListener("click", function () {
+  sound.enabled = !sound.enabled;
+
+  this.textContent = sound.enabled
+    ? "🔊 Sound ON"
+    : "🔇 Sound OFF";
+
+  this.setAttribute(
+    "aria-pressed",
+    String(sound.enabled)
+  );
+
+  if (sound.enabled) {
+    sound.play("flight");
+  }
+});
+
+/* Close win notifications */
+
+$("closeWin1").addEventListener("click", function () {
+  $("win-notification").hidden = true;
+});
+
+$("closeWin2").addEventListener("click", function () {
+  $("win-notification-2").hidden = true;
+});
+
+/* Start the app */
+
+load();
+resetFlight();
+setControls();
+
+syncRound();
+
+const pollTimer = setInterval(syncRound, 1000);
+
+window.addEventListener("pagehide", function () {
+  clearInterval(pollTimer);
+
+  if (winTimer1 !== null) {
+    clearTimeout(winTimer1);
+  }
+
+  if (winTimer2 !== null) {
+    clearTimeout(winTimer2);
+  }
+});
+</script>
+</body>
+</html>
