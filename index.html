@@ -1557,5 +1557,67 @@ window.addEventListener("pagehide", function () {
   }
 });
 </script>
+  <section id="mpesa-deposit-section" style="display:none; padding:20px; background:#10251c; color:white; border-radius:16px; margin:20px auto; max-width:420px;">
+  <h2>💚 Deposit via M-Pesa</h2>
+  <p>Enter your M-Pesa number and amount.</p><label for="mpesa-phone">M-Pesa phone number</label>
+<input
+id="mpesa-phone"
+type="tel"
+placeholder="2547XXXXXXXX"
+autocomplete="tel"
+style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
+
+«»
+
+<label for="mpesa-amount">Amount (KES)</label>
+<input
+id="mpesa-amount"
+type="number"
+id="mpesa-amount"
+min="1"
+step="1"
+placeholder="e.g. 100"
+style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
+
+«»
+
+<button type="button" onclick="requestMpesaDeposit()"
+style="width:100%;padding:14px;background:#20c878;color:#10251c;border:0;border-radius:10px;font-weight:bold;">
+Deposit via M-Pesa
+</button>
+
+  <p id="mpesa-status" role="status" aria-live="polite"></p><button type="button" onclick="closeMpesaDeposit()"
+style="padding:10px;background:#263c32;color:white;border:0;border-radius:8px;">
+Back to game
+</button>
+
+</section><script>
+function openMpesaDeposit() {
+  document.getElementById("mpesa-deposit-section").style.display = "block";
+  document.getElementById("mpesa-status").textContent = "";
+}
+
+function closeMpesaDeposit() {
+  document.getElementById("mpesa-deposit-section").style.display = "none";
+}
+
+async function requestMpesaDeposit() {
+  const phone = document.getElementById("mpesa-phone").value.trim();
+  const amount = Number(document.getElementById("mpesa-amount").value);
+  const status = document.getElementById("mpesa-status");
+
+  if (!/^254[17]\d{8}$/.test(phone)) {
+    status.textContent = "Enter a valid Kenyan number, e.g. 254712345678.";
+    return;
+  }
+
+  if (!Number.isInteger(amount) || amount < 1) {
+    status.textContent = "Enter a whole-number amount of at least KES 1.";
+    return;
+  }
+
+  status.textContent = "The deposit form is ready, but payment processing is not connected yet.";
+}
+</script>
 </body>
 </html>
