@@ -603,7 +603,6 @@ button[hidden] {
 </main>
   
   <script>
-alert("SkyCrash JavaScript is running!");
 "use strict";
 
 const $ = id => document.getElementById(id);
@@ -754,6 +753,8 @@ function updateDisplays() {
 }
 
 function setControls() {
+  $("result").textContent =
+  "DEBUG: phase=" + phase + ", ready=" + (phase === "ready");
   const ready = phase === "ready";
   const running = phase === "running";
 
