@@ -706,9 +706,11 @@ function updateDisplays() {
 }
 
 function setControls() {
+function setControls() {
   const ready = phase === "ready";
   const running = phase === "running";
 
+  // Allow betting only during the betting window.
   $("play").disabled = !(ready || (running && !bet1Placed));
   $("play2").disabled = !(ready || (running && !bet2Placed));
 
@@ -722,24 +724,36 @@ function setControls() {
 
   $("playLabel").textContent =
     bet1Placed ? (ready ? "CANCEL BET" : "BET PLACED") : "BET";
-  $("play").className = bet1Placed ? "red-button" : "green-button";
+
+  $("play").className =
+    bet1Placed ? "red-button" : "green-button";
 
   $("play2").querySelector("span").textContent =
-    bet2Placed ? (ready ? "CANCEL BET 2" : "BET 2 PLACED") : "BET 2";
-  $("play2").className = bet2Placed ? "red-button" : "green-button";
+    bet2Placed
+      ? (ready ? "CANCEL BET 2" : "BET 2 PLACED")
+      : "BET 2";
 
-  $("cashout").hidden = !(running && bet1Placed && !cashedOut);
-  $("cashout").disabled = !(running && bet1Placed && !cashedOut);
+  $("play2").className =
+    bet2Placed ? "red-button" : "green-button";
 
-  $("cashout2").hidden = !(running && bet2Placed && !cashedOut2);
-  $("cashout2").disabled = !(running && bet2Placed && !cashedOut2);
+  $("cashout").hidden =
+    !(running && bet1Placed && !cashedOut);
+
+  $("cashout").disabled =
+    !(running && bet1Placed && !cashedOut);
+
+  $("cashout2").hidden =
+    !(running && bet2Placed && !cashedOut2);
+
+  $("cashout2").disabled =
+    !(running && bet2Placed && !cashedOut2);
 
   $("autoTarget").disabled = !ready;
   $("autoBet").disabled = phase === "waiting";
   $("autoCash").disabled = phase === "waiting";
 
   updateDisplays();
-}
+    }
 
 function resetFlight() {
   $("plane").textContent = "✈️";
