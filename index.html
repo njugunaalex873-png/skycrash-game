@@ -440,7 +440,73 @@ button[hidden] {
   border-radius: 10px;
   transform-origin: left center;
 }
-  
+  /* Mobile phone layout improvements */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+body {
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+input,
+select {
+  max-width: 100%;
+  font: inherit;
+}
+
+img,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 8px;
+  }
+
+  .container,
+  .game-container,
+  .app,
+  main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .game-arena,
+  #game-arena,
+  .arena {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  button {
+    min-height: 42px;
+    padding: 9px 12px;
+  }
+
+  input,
+  select {
+    min-width: 0;
+  }
+
+  #plane {
+    max-width: 100%;
+  }
+                     }
 </style>
 </head>
 
