@@ -1309,46 +1309,58 @@ if (statusData.status === "running") {
       return;
     }
 
-    if (statusData.status === "crashed") {
-    if (statusData.status === "crashed") {
-  phase = "waiting";
-  $("status").textContent = "Wait for next round...";
-  $("result").textContent = "Get ready for the next flight!";
-  $("result").style.color = "var(--green)";
-  $("trail").style.display = "none";
-  $("trail").style.width = "0";
-  $("plane").style.display = "none";
-  setControls();
-  return;
+if (statusData.status === "crashed") {
+      if (
+        phase === "running" &&
+        serverRoundId === statusData.roundId
+      ) {
+        const data = await getMultiplier();
+
+        finishCrash(
+          data ? data.crashAt : multiplier,
+          statusData.roundId
+        );
+
+        sound.play("crash");
+      }
+
+      phase = "waiting";
+      $("status").textContent = "Wait for next round...";
+      $("result").textContent = "Get ready for the next flight!";
+      $("result").style.color = "var(--green)";
+
+      $("countdown-container").hidden = true;
+      $("trail").style.display = "none";
+      $("trail").style.width = "0";
+      $("plane").style.display = "none";
+
+      setControls();
+      return;
     }
 
-    /*
-      The server is waiting for the next round.
-      Bets are enabled only when the server provides
-      a round that has not started yet.
-    */
-
+    // Prepare for the next round.
     if (serverRoundId !== statusData.roundId) {
       serverRoundId = statusData.roundId;
     }
 
     phase = "ready";
-    $("status").textContent = "Wait for next round...";
-    $("result").textContent = "Place your virtual bet when the next round is ready.";
+
     $("trail").style.display = "none";
     $("trail").style.width = "0";
     $("plane").style.display = "none";
-    updateCountdown(statusData.createdAt);
-    $("status").textContent =
-      "Round waiting to start. Place your virtual bet.";
 
+    updateCountdown(statusData.createdAt);
+
+    $("status").textContent = "Wait for next round...";
+    $("result").textContent =
+      "Place your virtual bet when the next round is ready.";
     $("result").style.color = "var(--green)";
 
     setControls();
 
     if ($("autoBet").checked && !bet1Placed) {
       placeBet(1);
-    }
+          }
 } catch (error) {
 $("status").textContent = "⚠️ Reconnecting...";
 $("result").textContent =
@@ -1415,9 +1427,6 @@ $("bet2").addEventListener("input", updateDisplays);
 /* Main bet buttons */
 
 $("play").addEventListener("click", function () {
-$("result").textContent = "TEST: BET button clicked!";
-console.log("BET button click detected");
-
 if (bet1Placed) {
 cancelBet(1);
 } else {
