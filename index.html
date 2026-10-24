@@ -1276,11 +1276,14 @@ $("bet2").addEventListener("input", updateDisplays);
 /* Main bet buttons */
 
 $("play").addEventListener("click", function () {
-  if (bet1Placed) {
-    cancelBet(1);
-  } else {
-    placeBet(1);
-  }
+$("result").textContent = "TEST: BET button clicked!";
+console.log("BET button click detected");
+
+if (bet1Placed) {
+cancelBet(1);
+} else {
+placeBet(1);
+}
 });
 
 $("play2").addEventListener("click", function () {
