@@ -117,14 +117,18 @@ main {
 }
 
 #plane {
+#plane {
   position: absolute;
   left: 8%;
   bottom: 20px;
   font-size: 34px;
   z-index: 3;
-  transition: left 0.9s linear, bottom 0.9s linear;
-  will-change: left, bottom;
-}
+  transition:
+    left 0.25s linear,
+    bottom 0.25s linear,
+    transform 0.25s linear;
+  will-change: left, bottom, transform;
+  }
 
 #trail {
   position: absolute;
@@ -791,6 +795,8 @@ function resetFlight() {
   $("plane").textContent = "✈️";
   $("plane").style.left = "8%";
   $("plane").style.bottom = "20px";
+  $("plane").style.transform = "rotate(0deg)";
+  $("trail").style.transform = "none";
 
   $("trail").style.width = "0";
   $("trail").style.background = "var(--green)";
@@ -1042,18 +1048,30 @@ function updateCountdown(createdAt) {
 function animateFlight() {
   if (phase !== "running") return;
 
+  // Progress increases as the multiplier rises.
   const progress = Math.min(
     1,
     Math.max(0, (multiplier - 1) / 8)
   );
 
+  // Move the plane from left to right.
   const left = 8 + progress * 77;
-  const bottom = 20 + progress * 145;
+
+  // Create a smooth upward curve.
+  const bottom = 20 + Math.pow(progress, 1.65) * 175;
+
+  // Rotate the plane slightly upward as it climbs.
+  const angle = -8 - progress * 12;
 
   $("plane").style.left = left + "%";
   $("plane").style.bottom = bottom + "px";
+  $("plane").style.transform = "rotate(" + angle + "deg)";
+
+  // Draw the trail behind the plane.
   $("trail").style.width = Math.max(0, left - 8) + "%";
-}
+  $("trail").style.transform = "rotate(-18deg)";
+  $("trail").style.transformOrigin = "left center";
+    }
   
 window.addEventListener("error", function(event) {
   $("result").textContent =
