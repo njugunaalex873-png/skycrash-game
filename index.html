@@ -1032,12 +1032,11 @@ function finishCrash(value, roundId) {
 
   $("multiplier").textContent = crashAt.toFixed(2) + "x";
   $("multiplier").style.color = "var(--red)";
-  $("plane").textContent = "💥";
+  $("plane").textContent = "✈️";
   $("status").textContent = "CRASH!";
 
-  $("trail").style.background = "var(--red)";
-  $("trail").style.boxShadow = "0 0 12px var(--red)";
-
+  $("trail").style.background = "var(--green)";
+  $("trail").style.boxShadow = "none";
   history.unshift(crashAt);
   history = history.slice(0, 12);
 
