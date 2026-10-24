@@ -1206,17 +1206,13 @@ if (statusData.status === "running") {
     if ($("autoBet").checked && !bet1Placed) {
       placeBet(1);
     }
-
-  } catch (error) {
-    $("status").textContent = "⚠️ Reconnecting...";
-
-    $("result").textContent =
-      "Could not reach the game server. Retrying automatically.";
-
-    console.error("SkyCrash server error:", error);
-
-  } finally {
-    syncBusy = false;
+} catch (error) {
+$("status").textContent = "⚠️ Reconnecting...";
+$("result").textContent =
+"Connection error: " + (error.message || String(error));
+console.error("SkyCrash server error:", error);
+} finally {
+syncBusy = false;
   }
 }
 
