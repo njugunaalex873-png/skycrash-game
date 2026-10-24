@@ -1310,25 +1310,16 @@ if (statusData.status === "running") {
     }
 
     if (statusData.status === "crashed") {
-      if (
-        phase === "running" &&
-        serverRoundId === statusData.roundId
-      ) {
-        const data = await getMultiplier();
-
-        finishCrash(
-          data ? data.crashAt : multiplier,
-          statusData.roundId
-        );
-
-        sound.play("crash");
-      } else {
-        phase = "waiting";
-        $("status").textContent = "Waiting for next round...";
-        setControls();
-      }
-
-      return;
+    if (statusData.status === "crashed") {
+  phase = "waiting";
+  $("status").textContent = "Wait for next round...";
+  $("result").textContent = "Get ready for the next flight!";
+  $("result").style.color = "var(--green)";
+  $("trail").style.display = "none";
+  $("trail").style.width = "0";
+  $("plane").style.display = "none";
+  setControls();
+  return;
     }
 
     /*
@@ -1342,8 +1333,10 @@ if (statusData.status === "running") {
     }
 
     phase = "ready";
+    $("status").textContent = "Wait for next round...";
+    $("result").textContent = "Place your virtual bet when the next round is ready.";
     $("trail").style.display = "none";
-$("trail").style.width = "0";
+    $("trail").style.width = "0";
     $("plane").style.display = "none";
     updateCountdown(statusData.createdAt);
     $("status").textContent =
