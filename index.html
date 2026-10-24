@@ -1385,8 +1385,10 @@ resetFlight();
 setControls();
 
 syncRound();
+console.log("SkyCrash startup: syncRound called");
 
 pollTimer = setInterval(syncRound, 1000);
+console.log("SkyCrash startup: polling started");
 
 window.addEventListener("pagehide", function () {
   clearInterval(pollTimer);
