@@ -122,10 +122,6 @@ main {
   bottom: 20px;
   font-size: 34px;
   z-index: 3;
-  transition:
-    left 0.25s linear,
-    bottom 0.25s linear,
-    transform 0.25s linear;
   will-change: left, bottom, transform;
 }
 
@@ -1044,27 +1040,54 @@ function updateCountdown(createdAt) {
     "scaleX(" + (remaining / countdownDuration) + ")";
   }
     
-function animateFlight() {
-  if (phase !== "running") return;
+let smoothProgress = 0;
+let animationStarted = false;
 
-  const progress = Math.min(
+function animateFlight() {
+  if (phase !== "running") {
+    smoothProgress = 0;
+    animationStarted = false;
+    return;
+  }
+
+  if (!animationStarted) {
+    animationStarted = true;
+    smoothProgress = 0;
+  }
+
+  const targetProgress = Math.min(
     1,
     Math.max(0, (multiplier - 1) / 8)
   );
 
-  const left = 8 + progress * 77;
-  const bottom = 20 + Math.pow(progress, 1.65) * 175;
-  const angle = -8 - progress * 12;
+  // Move smoothly toward the latest server value.
+  smoothProgress +=
+    (targetProgress - smoothProgress) * 0.12;
+
+  const left = 8 + smoothProgress * 77;
+  const bottom =
+    20 + Math.pow(smoothProgress, 1.65) * 175;
+  const angle = -8 - smoothProgress * 12;
 
   $("plane").style.left = left + "%";
   $("plane").style.bottom = bottom + "px";
-  $("plane").style.transform = "rotate(" + angle + "deg)";
+  $("plane").style.transform =
+    "rotate(" + angle + "deg)";
 
-  $("trail").style.width = Math.max(0, left - 8) + "%";
+  $("trail").style.width =
+    Math.max(0, left - 8) + "%";
+
   $("trail").style.transform = "rotate(-18deg)";
   $("trail").style.transformOrigin = "left center";
 }
-  
+
+// Keep the animation running between server updates.
+function smoothFlightLoop() {
+  animateFlight();
+  requestAnimationFrame(smoothFlightLoop);
+}
+
+requestAnimationFrame(smoothFlightLoop);
 window.addEventListener("error", function(event) {
   $("result").textContent =
     "JavaScript error: " + event.message;
