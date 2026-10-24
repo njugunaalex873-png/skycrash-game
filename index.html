@@ -495,8 +495,7 @@ button[hidden] {
 
   <section class="card">
     <div class="label">FLIGHT ARENA</div>
-    <div id="game">
-
+  
 <div id="game">
   <div id="multiplier">1.00x</div>
   <div id="status">Connecting to game...</div>
@@ -598,7 +597,7 @@ button[hidden] {
     </div>
     <p class="note" id="bet2Status">Virtual coins only</p>
   </section>
-
+<div id="result" class="result" aria-live="polite"></div>
   <p class="note">SkyCrash © 2026 · Independent crash game demo</p>
 </main>
   
@@ -753,8 +752,6 @@ function updateDisplays() {
 }
 
 function setControls() {
-  $("result").textContent =
-  "DEBUG: phase=" + phase + ", ready=" + (phase === "ready");
   const ready = phase === "ready";
   const running = phase === "running";
 
@@ -1385,7 +1382,6 @@ load();
 resetFlight();
 setControls();
 
-$("status").textContent = "TEST: UPDATED GAME LOADED";
 syncRound();
 console.log("SkyCrash startup: syncRound called");
 
