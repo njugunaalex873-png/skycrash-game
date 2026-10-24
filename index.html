@@ -1745,52 +1745,50 @@ function finishCrash() {
   setControls();
 
   nextRoundTimer = setTimeout(async () => {
-    $("status").textContent = "Synchronizing next round...";
-    $("result").textContent = "Connecting to the next round...";
+  nextRoundTimer = setTimeout(async () => {
+  nextRoundTimer = null;
+
+  $("status").textContent = "Waiting for next round...";
+  $("result").textContent = "The next round will start automatically.";
+
+  const waitForNextRound = async () => {
+    if (phase !== "waiting") return;
 
     try {
       const data = await getServerGameStatus();
 
-      if (!data || !data.roundId) {
-        throw new Error("No round is available yet.");
-      }
+      if (data && data.roundId && data.status === "running") {
+        serverRoundId = data.roundId;
 
-      serverRoundId = data.roundId;
-      phase = "ready";
+        // Reset both betting panels for the new round.
+        bet1Placed = false;
+        cashedOut = false;
+        betAmount = 0;
 
-      bet1Placed = false;
-      cashedOut = false;
-      betAmount = 0;
+        bet2Placed = false;
+        cashedOut2 = false;
+        bet2Amount = 0;
 
-      bet2Placed = false;
-      cashedOut2 = false;
-      bet2Amount = 0;
+        phase = "ready";
 
-      $("bet2Status").textContent = "Ready for takeoff";
-      $("bet2Payout").textContent = "0 coins";
+        $("bet2Status").textContent = "Ready for takeoff";
+        $("bet2Payout").textContent = "0 coins";
 
-      resetFlight();
+        setControls();
 
-      $("result").style.color = "var(--green)";
-      $("status").textContent = "Ready for takeoff";
-
-      setControls();
-      nextRoundTimer = null;
-
-      if ($("autoBet").checked) {
-        placeBet();
+        // Join the round already running on the server.
+        await startRound();
+        return;
       }
     } catch (error) {
-      phase = "waiting";
-      $("status").textContent = "Waiting for server...";
-      $("result").textContent =
-        "Could not sync the next round. Reload the game to retry.";
-      setControls();
-      nextRoundTimer = null;
+      console.warn("Waiting for the next round:", error);
     }
-  }, 3500);
-   }
-  
+
+    nextRoundTimer = setTimeout(waitForNextRound, 500);
+  };
+
+  await waitForNextRound();
+}, 2000);
 // PANEL 1 AMOUNT CONTROLS
 $("decreaseBet").onclick = () => {
   $("bet").value = Math.max(
