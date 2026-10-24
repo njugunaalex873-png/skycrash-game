@@ -1078,6 +1078,9 @@ async function syncRound() {
 
   try {
     const statusData = await getStatus();
+    
+    $("status").textContent = "Connected: " + statusData.status;
+$("result").textContent = "Round ID: " + statusData.roundId;
 
     if (!statusData || !statusData.roundId) {
       phase = "waiting";
