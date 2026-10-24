@@ -1619,5 +1619,94 @@ async function requestMpesaDeposit() {
   status.textContent = "The deposit form is ready, but payment processing is not connected yet.";
 }
 </script>
+  <!-- TEMPORARY M-PESA SANDBOX TEST -->
+<section id="mpesa-sandbox-test"
+  style="margin:20px;padding:16px;border:2px solid #176b46;
+  border-radius:12px;background:#fff;color:#222;">
+
+  <h2>M-Pesa Sandbox Test</h2>
+  <p>Testing only. No player balance will be credited.</p>
+
+  <label for="mpesa-test-phone">Test phone number</label>
+  <input id="mpesa-test-phone"
+    type="tel"
+    value="254708374149"
+    style="display:block;width:100%;padding:12px;
+    margin:8px 0 14px;box-sizing:border-box;">
+
+  <label for="mpesa-test-amount">Test amount</label>
+  <input id="mpesa-test-amount"
+    type="number"
+    min="1"
+    max="10000"
+    step="1"
+    value="1"
+    style="display:block;width:100%;padding:12px;
+    margin:8px 0 14px;box-sizing:border-box;">
+
+  <button id="mpesa-test-button"
+    type="button"
+    style="padding:12px 18px;background:#176b46;
+    color:white;border:0;border-radius:8px;">
+    Send Sandbox Test
+  </button>
+
+  <pre id="mpesa-test-result"
+    style="white-space:pre-wrap;overflow-wrap:anywhere;
+    margin-top:14px;"></pre>
+</section>
+
+<script>
+(() => {
+  const button = document.getElementById("mpesa-test-button");
+  const result = document.getElementById("mpesa-test-result");
+
+  button.addEventListener("click", async () => {
+    const phone = document.getElementById("mpesa-test-phone").value.trim();
+    const amount = Number(
+      document.getElementById("mpesa-test-amount").value
+    );
+
+    if (!/^254\d{9}$/.test(phone)) {
+      result.textContent =
+        "Enter a Kenyan number like 254712345678.";
+      return;
+    }
+
+    if (!Number.isSafeInteger(amount) || amount < 1 || amount > 10000) {
+      result.textContent = "Enter a whole-number test amount from 1 to 10000.";
+      return;
+    }
+
+    button.disabled = true;
+    result.textContent = "Sending sandbox request...";
+
+    try {
+      const response = await fetch(
+        "https://skycrash-predictor.onrender.com/api/mpesa/stkpush",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ phone, amount })
+        }
+      );
+
+      const data = await response.json();
+      result.textContent =
+        "HTTP " + response.status + "\n" +
+        JSON.stringify(data, null, 2);
+    } catch (error) {
+      result.textContent =
+        "Request failed. Check your internet connection and Render logs. " +
+        error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+})();
+</script>
+<!-- END TEMPORARY M-PESA SANDBOX TEST -->
 </body>
 </html>
