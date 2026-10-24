@@ -1287,7 +1287,7 @@ setControls();
 
 syncRound();
 
-const pollTimer = setInterval(syncRound, 1000);
+pollTimer = setInterval(syncRound, 1000);
 
 window.addEventListener("pagehide", function () {
   clearInterval(pollTimer);
