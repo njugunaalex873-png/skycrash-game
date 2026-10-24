@@ -1411,43 +1411,47 @@ async function startServerGameRound() {
 }
 
   async function startRound() {
-  if (phase !== "ready") return;
+  async function startRound() {
+  if (phase === "running") return;
 
-  $("result").textContent = "Connecting to SkyCrash server...";
+  $("result").textContent = "Synchronizing with the game...";
   $("status").textContent = "⏳ Connecting...";
   setControls();
 
   try {
-    const data = await startServerGameRound();
+    const data = await getServerGameStatus();
 
-    if (data.status !== "running" || !data.roundId) {
-      throw new Error(
-        "The server round is not running yet. Please try again."
-      );
+    if (!data || !data.roundId) {
+      throw new Error("No round is available yet.");
+    }
+
+    if (data.status !== "running") {
+      $("status").textContent = "Waiting for automatic takeoff...";
+      return;
     }
 
     serverRoundId = data.roundId;
-    crashAt = 0;
     multiplier = 1;
+    crashAt = 0;
     phase = "running";
-    roundStartedAt = performance.now();
 
     resetFlight();
 
-    $("result").textContent =
-      "Round started! Cash out either bet before the crash.";
-
     $("status").textContent = "🚀 Flying...";
-    skySound.play("flight");
+    $("result").textContent = "Round in progress.";
 
+    skySound.play("flight");
     setControls();
+
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
+    }
+
     animationFrame = requestAnimationFrame(tick);
+
   } catch (error) {
-    phase = "ready";
-    $("status").textContent = "⚠️ Server connection failed";
-    $("result").textContent =
-      error.message || "Could not connect. Please try again.";
-    setControls();
+    $("status").textContent = "⚠️ Reconnecting...";
+    $("result").textContent = error.message;
   }
   }
 
