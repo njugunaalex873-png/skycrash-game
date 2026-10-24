@@ -1248,6 +1248,7 @@ if (statusData.status === "running") {
     
       resetFlight();
         $("plane").style.display = "block";
+        $("trail").style.display = "block";
         $("status").textContent = "🚀 Flying...";
         $("result").style.color = "var(--green)";
         $("result").textContent = "Round in progress.";
@@ -1341,6 +1342,8 @@ if (statusData.status === "running") {
     }
 
     phase = "ready";
+    $("trail").style.display = "none";
+$("trail").style.width = "0";
     $("plane").style.display = "none";
     updateCountdown(statusData.createdAt);
     $("status").textContent =
