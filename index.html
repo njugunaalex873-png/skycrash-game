@@ -117,6 +117,7 @@ main {
 }
 
 #plane {
+  display: none;
   position: absolute;
   left: 8%;
   bottom: 20px;
@@ -1027,6 +1028,7 @@ function finishCrash(value, roundId) {
 
   lastCrashRoundId = roundId;
   phase = "waiting";
+  $("plane").style.display = "none";
 
   crashAt = Number(value) || multiplier;
 
@@ -1244,7 +1246,7 @@ if (statusData.status === "running") {
      $("multiplier").textContent = "1.00x";
     
       resetFlight();
-
+        $("plane").style.display = "block";
         $("status").textContent = "🚀 Flying...";
         $("result").style.color = "var(--green)";
         $("result").textContent = "Round in progress.";
