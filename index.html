@@ -1002,6 +1002,40 @@ function finishCrash(value, roundId) {
   setControls();
 }
 
+function updateCountdown(createdAt) {
+  const container = $("countdown-container");
+  const label = $("countdown-label");
+  const line = $("countdown-line");
+
+  if (!container || !label || !line) return;
+
+  const countdownDuration = 10000;
+  const createdTime = new Date(createdAt).getTime();
+
+  if (!Number.isFinite(createdTime)) {
+    container.hidden = true;
+    return;
+  }
+
+  const elapsed = Date.now() - createdTime;
+  const remaining = Math.max(
+    0,
+    countdownDuration - elapsed
+  );
+
+  if (remaining <= 0) {
+    container.hidden = true;
+    return;
+  }
+
+  container.hidden = false;
+  label.textContent =
+    "JET TAKES OFF IN " + Math.ceil(remaining / 1000) + "s";
+
+  line.style.transform =
+    "scaleX(" + (remaining / countdownDuration) + ")";
+  }
+    
 function animateFlight() {
   if (phase !== "running") return;
 
@@ -1037,13 +1071,15 @@ async function syncRound() {
       return;
     }
 
-    if (statusData.status === "running") {
-      if (serverRoundId !== statusData.roundId) {
-        serverRoundId = statusData.roundId;
-        phase = "running";
-        multiplier = 1;
-        crashAt = 0;
+if (statusData.status === "running") {
+  $("countdown-container").hidden = true;
 
+  if (serverRoundId !== statusData.roundId) {
+    serverRoundId = statusData.roundId;
+    phase = "running";
+    multiplier = 1;
+    crashAt = 0;
+    
         resetFlight();
 
         $("status").textContent = "🚀 Flying...";
@@ -1140,7 +1176,7 @@ async function syncRound() {
     }
 
     phase = "ready";
-
+    updateCountdown(statusData.createdAt);
     $("status").textContent =
       "Round waiting to start. Place your virtual bet.";
 
