@@ -16,9 +16,7 @@
   --muted: #94a5bd;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -31,7 +29,9 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px;
   background: #0d192a;
   border-bottom: 1px solid #26344a;
 }
@@ -43,8 +43,11 @@ header {
 }
 
 .wallet {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   background: var(--panel);
-  padding: 10px 13px;
+  padding: 8px 10px;
   border-radius: 10px;
   font-weight: bold;
 }
@@ -130,25 +133,18 @@ main {
   box-shadow: 0 0 12px var(--green);
 }
 
-.controls {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-input,
-button {
+input, button {
   width: 100%;
-  padding: 13px;
+  padding: 12px;
   border-radius: 9px;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 input {
   background: #091525;
   border: 1px solid #34455e;
   color: white;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
 
 button {
@@ -163,33 +159,123 @@ button:disabled {
 }
 
 .green-button {
-  background: var(--green);
-  color: #061b17;
+  background: #19b900;
+  color: white;
+  border: 2px solid #83f76c;
 }
 
 .red-button {
-  background: var(--red);
+  background: #d87900;
+  color: white;
+  border: 2px solid #ffb24d;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+.bet-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 5px;
+  border-radius: 30px;
+  background: #090e16;
+}
+
+.bet-tab {
+  flex: 1;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 25px;
+}
+
+.bet-tab.active {
+  background: #303746;
   color: white;
 }
 
-.options {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 14px;
-  color: var(--muted);
-  font-size: 13px;
+.bet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
 }
 
-.options label {
+.amount-control {
   display: flex;
   align-items: center;
+  gap: 4px;
+  padding: 3px;
+  background: #091525;
+  border-radius: 30px;
+  margin-bottom: 8px;
+  height: 42px;
+}
+
+.amount-control button {
+  flex: 0 0 28px;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  background: #303746;
+  color: white;
+}
+
+.amount-control input {
+  min-width: 0;
+  width: 0;
+  flex: 1;
+  margin: 0;
+  padding: 4px 0;
+  text-align: center;
+  border: 0;
+  background: transparent;
+}
+
+.quick-bets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
 }
 
-.options input {
-  width: auto;
-  margin: 0;
+.quick-bets button {
+  height: 36px;
+  padding: 4px 2px;
+  background: #091525;
+  color: white;
+  font-size: 12px;
+}
+
+.bet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bet-actions button {
+  height: 74px;
+  min-height: 74px;
+  padding: 5px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  line-height: 1.35;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: center;
 }
 
 .result {
@@ -216,148 +302,9 @@ button:disabled {
   font-weight: bold;
 }
 
-.low {
-  color: #ff7185;
-}
+.low { color: #ff7185; }
+.high { color: var(--green); }
 
-.high {
-  color: var(--green);
-}
-
-.note {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
-  text-align: center;
-}
-
-h3 {
-  margin-top: 0;
-}
-
-@media (max-width: 360px) {
-  #game {
-    height: 240px;
-  }
-
-  .card {
-    padding: 12px;
-  }
-}
-  /* Betting controls */
-.bet-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-  padding: 5px;
-  border-radius: 30px;
-  background: #090e16;
-}
-
-.bet-tab {
-  flex: 1;
-  background: transparent;
-  color: #94a5bd;
-  border-radius: 25px;
-}
-
-.bet-tab.active {
-  background: #303746;
-  color: white;
-}
-
-.bet-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 12px;
-  align-items: stretch;
-}
-
-.amount-control {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px;
-  background: #091525;
-  border-radius: 30px;
-  margin-bottom: 10px;
-}
-
-.amount-control button {
-  width: 38px;
-  min-width: 38px;
-  padding: 8px 0;
-  border-radius: 50%;
-  background: #303746;
-  color: white;
-}
-
-.amount-control input {
-  min-width: 0;
-  width: 100%;
-  margin: 0;
-  padding: 8px 2px;
-  text-align: center;
-  border: 0;
-  background: transparent;
-}
-
-.quick-bets {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px;
-}
-
-.quick-bets button {
-  padding: 10px 3px;
-  border-radius: 25px;
-  background: #091525;
-  color: white;
-  font-size: 13px;
-}
-
-.bet-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.bet-actions button {
-  min-height: 86px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-}
-
-#cashout {
-  background: #ffd400;
-  color: #111827;
-  border: 2px solid #fff06a;
-}
-  
-
-#cashout:disabled {
-  opacity: 0.5;
-}
-
-#play {
-  background: #19b900;
-  color: white;
-  border: 2px solid #83f76c;
-}
-
-#win-notification[hidden],
-#win-notification-2[hidden],
-#cashout[hidden],
-#cashout2[hidden] {
-  display: none !important;
-}
-
-/* Win notification, similar to your reference screenshot */
 .win-notification {
   position: fixed;
   top: max(12px, env(safe-area-inset-top));
@@ -374,9 +321,13 @@ h3 {
   box-shadow: 0 5px 22px #0008;
 }
 
+.win-notification[hidden],
+button[hidden] {
+  display: none !important;
+}
+
 .win-message {
   flex: 1;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -386,403 +337,116 @@ h3 {
   text-align: center;
 }
 
-.win-message strong {
-  font-size: 16px;
-}
+.win-message strong { font-size: 16px; }
 
 .win-amount {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  min-width: 100px;
-  padding: 9px 12px;
+  min-width: 95px;
+  padding: 9px 10px;
   border-radius: 30px;
   background: #477f2b;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
 }
 
-.win-amount strong {
-  font-size: 18px;
-}
+.win-amount strong { font-size: 16px; }
 
 .close-win-notification {
-  width: 34px;
-  min-width: 34px;
+  width: 32px;
+  min-width: 32px;
   padding: 5px;
   border-radius: 50%;
   background: #294536;
   color: white;
-  font-size: 22px;
+  font-size: 20px;
 }
 
-@media (max-width: 360px) {
-  .bet-layout {
-    grid-template-columns: 1fr;
-  }
+.auto-settings { margin-top: 12px; }
 
-  .bet-actions button {
-    min-height: 70px;
-  }
-  }
-  /* SECOND BETTING PANEL */
-#secondBettingCard {
-  margin-top: 16px;
-}
-
-#secondBettingCard .label {
-  margin-bottom: 14px;
-}
-
-#secondBettingCard #bet2Payout {
-  color: #35df91;
-}
-
-#secondBettingCard #bet2Status {
-  text-align: center;
-  font-size: 12px;
-  color: #9eb1c7;
-}
-
-#secondBettingCard button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-  #cashout2 {
-  background: #d87900;
-  color: white;
-  border: 2px solid #ffb24d;
-}
-
-#play2 {
-  background: #19b900;
-  color: white;
-  border: 2px solid #83f76c;
-}
-  
-/* Keep both win notifications visible without overlapping */
-#win-notification {
-  top: max(12px, env(safe-area-inset-top));
-}
-
-/* Panel 1 notification stays at the top */
-#win-notification {
-  top: max(12px, env(safe-area-inset-top));
-}
-
-/* Panel 2 notification appears below Panel 1 */
-#win-notification-2 {
-  top: calc(max(12px, env(safe-area-inset-top)) + 82px);
-}
-  
-  
-/* AVIATOR-STYLE MATCHING BETTING PANELS */
-
-.betting-card {
-  width: 100%;
-  min-width: 0;
-  padding: 12px;
-  margin: 0 0 10px;
-  border: 1px solid #26344a;
-  border-radius: 12px;
-}
-
-/* Identical two-column betting layout */
-.betting-card .bet-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 8px;
-  align-items: stretch;
-}
-
-/* Matching stake controls */
-.betting-card .amount-control {
-  width: 100%;
-  height: 40px;
-  gap: 4px;
-  padding: 3px;
-  margin-bottom: 8px;
-}
-
-.betting-card .amount-control button {
-  flex: 0 0 28px;
-  width: 28px;
-  min-width: 28px;
-  height: 28px;
-  padding: 0;
-}
-
-.betting-card .amount-control input {
-  min-width: 0;
-  height: 30px;
-  padding: 4px 0;
-  margin: 0;
-  font-size: 13px;
-}
-
-/* Identical quick-bet grids */
-.betting-card .quick-bets {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.betting-card .quick-bets button {
-  width: 100%;
-  height: 34px;
-  padding: 4px 2px;
-  font-size: 12px;
-}
-
-/* Identical action button dimensions */
-.betting-card .bet-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.betting-card .bet-actions button {
-  width: 100%;
-  height: 74px;
-  min-height: 74px;
-  padding: 6px 3px;
-  gap: 5px;
-  font-size: 12px;
-  text-align: center;
-}
-
-/* Consistent panel headings and descriptions */
-.betting-card > .label {
-  min-height: 14px;
-  margin-bottom: 10px;
-  font-size: 11px;
-}
-
-.betting-card .note {
-  font-size: 10px;
-  line-height: 1.4;
-}
-
-/* Keep both panels side by side on phones */
-@media (max-width: 360px) {
-  .betting-card {
-    padding: 8px;
-  }
-
-  .betting-card .bet-layout {
-    gap: 6px;
-  }
-
-  .betting-card .bet-actions button {
-    height: 68px;
-    min-height: 68px;
-    font-size: 10px;
-  }
-  }
-  
-/* Make Panel 1 and Panel 2 betting boxes equal */
-.betting-card .bet-layout {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  align-items: stretch;
-}
-
-/* Equal-sized stake input boxes */
-.betting-card .amount-control {
-  width: 100%;
-  height: 42px;
+.auto-check {
   display: flex;
   align-items: center;
-}
-
-.betting-card .amount-control input {
-  flex: 1;
-  min-width: 0;
-  width: 0;
-  height: 32px;
-  text-align: center;
-}
-
-/* Equal-sized quick-bet boxes */
-.betting-card .quick-bets {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 7px;
+  margin: 9px 0;
+  color: var(--muted);
+  font-size: 12px;
 }
 
-.betting-card .quick-bets button {
-  width: 100%;
-  height: 38px;
-  min-width: 0;
-}
-
-/* Equal-sized BET and CASH OUT boxes */
-.betting-card .bet-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.betting-card .bet-actions button {
-  width: 100%;
-  height: 74px;
-  min-height: 74px;
+.auto-check input {
+  width: auto;
   margin: 0;
 }
 
-/* Keep the boxes equal on small Android screens */
-@media (max-width: 360px) {
-  .betting-card .bet-layout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-  }
+#sound-toggle,
+#resetCoinsButton {
+  width: auto;
+  padding: 8px 10px;
+  background: #10251c;
+  color: white;
+  border: 1px solid #35d07f;
+  font-size: 12px;
+}
 
-  .betting-card .bet-actions button {
+#secondBettingCard { margin-top: 16px; }
+
+@media (max-width: 360px) {
+  main { padding: 8px; }
+  .card { padding: 10px; }
+  .bet-layout { gap: 5px; }
+  .bet-actions button {
+    font-size: 10px;
     height: 68px;
     min-height: 68px;
   }
+  .quick-bets button { font-size: 11px; }
 }
-  
-  
-/* Make both betting panels exactly the same width */
-#secondBettingCard,
-.betting-card:not(#secondBettingCard) {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 12px;
-  margin: 0 0 14px;
-}
-
-/* Keep the inside layout identical */
-.betting-card .bet-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 8px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Prevent controls from stretching the box */
-.betting-card .bet-settings,
-.betting-card .bet-actions {
-  min-width: 0;
-  width: 100%;
-}
-
-.betting-card .amount-control,
-.betting-card .quick-bets,
-.betting-card .bet-actions button {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-/* Match both panels on narrow phones */
-@media (max-width: 360px) {
-  .betting-card,
-  #secondBettingCard {
-    padding: 8px;
-  }
-
-  .betting-card .bet-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 6px;
-  }
-  }
-  
-#cashout,
-#cashout2 {
-  background: #ffd400;
-  color: #111827;
-  border: 2px solid #fff06a;
-}
-  
-/* FORCE BOTH CASH OUT BUTTONS TO BE ORANGE */
-html body button#cashout,
-html body button#cashout2 {
-  background: #d87900 !important;
-  background-color: #d87900 !important;
-  color: #ffffff !important;
-  border: 2px solid #ffb24d !important;
-}
-  
- /* Force pending bet buttons to turn red */
-html body button#play.red-button,
-html body button#play2.red-button {
-  background: #ff4565 !important;
-  background-color: #ff4565 !important;
-  color: #ffffff !important;
-  border: 2px solid #ff8a9e !important;
-} 
-  #sound-toggle {
-width: auto;
-padding: 8px 12px;
-margin: 8px 0;
-border: 1px solid #35d07f;
-border-radius: 8px;
-background: #10251c;
-color: #ffffff;
-font-size: 12px;
-font-weight: bold;
-cursor: pointer;
-  }
-  
 </style>
-  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- PANEL 1 WIN NOTIFICATION -->
 <div id="win-notification" class="win-notification" hidden>
   <div class="win-message">
-    <span id="win-title">You have cashed out!</span>
+    <span id="win-title">Bet 1 cashed out!</span>
     <strong id="win-multiplier">1.00x</strong>
   </div>
-
   <div class="win-amount">
     <span>★ BET 1 WIN ★</span>
-    <strong id="win-payout">0 coins</strong>
+    <strong id="win-payout">KSh 0</strong>
   </div>
+  <button class="close-win-notification" id="closeWin1"
+          aria-label="Close notification">×</button>
 </div>
-<!-- PANEL 2 WIN NOTIFICATION -->
-<div id="win-notification-2" class="win-notification" hidden>
+
+<div id="win-notification-2" class="win-notification"
+     style="top:calc(max(12px, env(safe-area-inset-top)) + 82px)" hidden>
   <div class="win-message">
     <span id="win-title-2">Bet 2 cashed out!</span>
     <strong id="win-multiplier-2">1.00x</strong>
   </div>
-
   <div class="win-amount">
     <span>★ BET 2 WIN ★</span>
-    <strong id="win-payout-2">0 coins</strong>
+    <strong id="win-payout-2">KSh 0</strong>
   </div>
-
+  <button class="close-win-notification" id="closeWin2"
+          aria-label="Close notification">×</button>
 </div>
-  
+
 <header>
   <div class="logo">✈ SkyCrash</div>
-<div class="wallet">
-  🪙 <span id="balance">50000</span>
-<button
-  id="resetCoinsButton"
-  type="button"
-  style="width:auto;padding:5px 8px;margin-left:6px;font-size:11px;"
->
-  Reset
-</button>
-</div>
+  <div class="wallet">
+    🪙 <span id="balance">KSh 50,000</span>
+    <button id="resetCoinsButton" type="button">Reset</button>
+  </div>
   <button id="sound-toggle" type="button" aria-pressed="true">
-  🔊 Sound ON
+    🔊 Sound ON
   </button>
 </header>
 
 <main>
-  
-  <!-- RECENT CRASHES ABOVE THE FLIGHT ARENA -->
   <section class="card">
     <h3>📊 Recent Crashes</h3>
     <div id="history" class="history">
@@ -790,158 +454,115 @@ cursor: pointer;
     </div>
   </section>
 
-  <!-- FLIGHT ARENA -->
-<section class="card">
-  <div class="label">FLIGHT ARENA</div>
+  <section class="card">
+    <div class="label">FLIGHT ARENA</div>
+    <div id="game">
+      <div id="multiplier">1.00x</div>
+      <div id="status">Connecting to game...</div>
+      <div id="trail"></div>
+      <div id="plane">✈️</div>
+    </div>
+    <div id="result" class="result">
+      Connecting to the automatic game server...
+    </div>
+  </section>
 
-  <div id="game">
-    <div id="multiplier">1.00x</div>
-    <div id="status">Ready for takeoff</div>
-    <div id="trail"></div>
-    <div id="plane">✈️</div>
-  </div>
+  <section class="card betting-card">
+    <div class="bet-tabs">
+      <button type="button" class="bet-tab active" id="manualTab">Bet</button>
+      <button type="button" class="bet-tab" id="autoTab">Auto</button>
+    </div>
 
-  <div id="result" class="result">
-    Welcome to SkyCrash! Place a virtual bet to begin.
-  </div>
-</section>
-
-<section class="card betting-card">
-  <div class="bet-tabs">
-    <button type="button" class="bet-tab active" id="manualTab">
-      Bet
-    </button>
-    <button type="button" class="bet-tab" id="autoTab">
-      Auto
-    </button>
-  </div>
-  
-
-  <div class="bet-layout">
-    <div class="bet-settings">
-      <label class="amount-control">
-        <button type="button" id="decreaseBet">−</button>
-        <input id="bet" type="number" value="50" min="1" step="1">
-        <button type="button" id="increaseBet">+</button>
-      </label>
-
-      <div class="quick-bets">
-        <button type="button" data-bet="100">100</button>
-        <button type="button" data-bet="250">250</button>
-        <button type="button" data-bet="1000">1,000</button>
-        <button type="button" data-bet="25000">25,000</button>
-      </div>
-
-      <div class="auto-settings" id="autoSettings" hidden>
-        <label for="autoTarget">Auto cash-out multiplier</label>
-        <input id="autoTarget" type="number" value="2" min="1.01" step="0.01">
-
-        <label class="auto-check">
-          <input id="autoBet" type="checkbox">
-          Enable Auto Bet
+    <div class="bet-layout">
+      <div class="bet-settings">
+        <label class="amount-control">
+          <button type="button" id="decreaseBet" aria-label="Decrease bet">−</button>
+          <input id="bet" type="number" value="50" min="1" step="1"
+                 aria-label="Bet 1 amount">
+          <button type="button" id="increaseBet" aria-label="Increase bet">+</button>
         </label>
 
-        <label class="auto-check">
-          <input id="autoCash" type="checkbox">
-          Enable Auto Cash-Out
+        <div class="quick-bets">
+          <button type="button" data-bet="100">100</button>
+          <button type="button" data-bet="250">250</button>
+          <button type="button" data-bet="1000">1,000</button>
+          <button type="button" data-bet="25000">25,000</button>
+        </div>
+
+        <div class="auto-settings" id="autoSettings" hidden>
+          <label for="autoTarget" class="note">Auto cash-out multiplier</label>
+          <input id="autoTarget" type="number" value="2" min="1.01" step="0.01">
+          <label class="auto-check">
+            <input id="autoBet" type="checkbox"> Enable Auto Bet
+          </label>
+          <label class="auto-check">
+            <input id="autoCash" type="checkbox"> Enable Auto Cash-Out
+          </label>
+        </div>
+      </div>
+
+      <div class="bet-actions">
+        <button id="cashout" class="red-button" type="button" disabled hidden>
+          <span id="cashoutLabel">CASH OUT</span>
+          <strong id="cashoutValue">KSh 0</strong>
+        </button>
+        <button id="play" class="green-button" type="button">
+          <span id="playLabel">BET</span>
+          <strong id="betDisplay">50 coins</strong>
+        </button>
+      </div>
+    </div>
+
+    <p class="note">Demo game · Virtual coins only · No real money involved</p>
+  </section>
+
+  <section class="card betting-card" id="secondBettingCard">
+    <div class="label">BET PANEL 2</div>
+    <div class="bet-layout">
+      <div class="bet-settings">
+        <label class="amount-control">
+          <button type="button" id="decreaseBet2" aria-label="Decrease Bet 2">−</button>
+          <input id="bet2" type="number" value="50" min="1" step="1"
+                 aria-label="Bet 2 amount">
+          <button type="button" id="increaseBet2" aria-label="Increase Bet 2">+</button>
         </label>
-      </div>
-    </div>
 
-    <div class="bet-actions">
-      <button id="cashout" class="red-button" type="button" disabled hidden>
-        <span id="cashoutLabel">CASH OUT</span>
-        <strong id="cashoutValue">0 coins</strong>
-      </button>
+        <div class="quick-bets">
+          <button type="button" data-bet2="100">100</button>
+          <button type="button" data-bet2="250">250</button>
+          <button type="button" data-bet2="1000">1,000</button>
+          <button type="button" data-bet2="25000">25,000</button>
+        </div>
 
-      <button id="play" class="green-button" type="button">
-        <span id="playLabel">BET</span>
-        <strong id="betDisplay">50 coins</strong>
-      </button>
-    </div>
-  </div>
-
-  <p class="note">Demo game · Virtual KSh only · No real money involved</p>
-</section>
-
-<!-- SECOND BETTING PANEL -->
-<section class="card betting-card" id="secondBettingCard">
-  <div class="label">BET PANEL 2</div>
-
-  <div class="bet-layout">
-    <div class="bet-settings">
-      <label class="amount-control">
-        <button type="button" id="decreaseBet2">−</button>
-
-        <input
-          id="bet2"
-          type="number"
-          value="50"
-          min="1"
-          step="1"
-        >
-
-        <button type="button" id="increaseBet2">+</button>
-      </label>
-
-      <div class="quick-bets">
-        <button type="button" data-bet2="100">100</button>
-        <button type="button" data-bet2="250">250</button>
-        <button type="button" data-bet2="1000">1,000</button>
-        <button type="button" data-bet2="25000">25,000</button>
+        <p class="note">Bet 2 stake: <strong id="bet2Display">50 coins</strong></p>
+        <p class="note">Potential payout: <strong id="bet2Payout">KSh 0</strong></p>
       </div>
 
-      <p class="note">
-        Bet 2 stake: <strong id="bet2Display">50 coins</strong>
-      </p>
-
-      <p class="note">
-        Potential payout:
-        <strong id="bet2Payout">0 coins</strong>
-      </p>
+      <div class="bet-actions">
+        <button id="cashout2" class="red-button" type="button" disabled hidden>
+          <span id="cashoutLabel2">CASH OUT 2</span>
+          <strong id="cashoutValue2">KSh 0</strong>
+        </button>
+        <button id="play2" class="green-button" type="button">
+          <span>BET 2</span>
+          <strong id="play2Display">50 coins</strong>
+        </button>
+      </div>
     </div>
+    <p class="note" id="bet2Status">Virtual coins only</p>
+  </section>
 
-    <div class="bet-actions">
-      <button
-        id="cashout2"
-        class="red-button"
-        type="button"
-        disabled
-        hidden
-      >
-        <span id="cashoutLabel2">CASH OUT 2</span>
-        <strong id="cashoutValue2">0 coins</strong>
-      </button>
-
-      <button
-        id="play2"
-        class="green-button"
-        type="button"
-      >
-        <span>BET 2</span>
-        <strong id="play2Display">50 coins</strong>
-      </button>
-    </div>
-  </div>
-
-  <p class="note" id="bet2Status">
-    Ready for takeoff · Virtual coins only
-  </p>
-</section>
-
-<p class="note">
-  SkyCrash © 2026<br>
-  Independent crash game demo
-</p>
-
+  <p class="note">SkyCrash © 2026 · Independent crash game demo</p>
 </main>
 
-
 <script>
-const $ = id => document.getElementById(id);
+"use strict";
 
-let balance = 1000;
-let phase = "ready";
+const $ = id => document.getElementById(id);
+const API = "https://skycrash-predictor.onrender.com";
+
+let balance = 50000;
+let phase = "waiting";
 let multiplier = 1;
 let crashAt = 0;
 let serverRoundId = null;
@@ -954,281 +575,171 @@ let bet2Amount = 0;
 let bet2Placed = false;
 let cashedOut2 = false;
 
-let roundStartedAt = 0;
 let history = [];
-let animationFrame = null;
-let nextRoundTimer = null; let bettingCountdownTimer = null;
-let bettingCountdown = 0;
+let pollTimer = null;
+let syncBusy = false;
 let winTimer1 = null;
 let winTimer2 = null;
+let lastCrashRoundId = null;
 
-function formatKSh(amount) {
-return "KSh " + Math.floor(amount).toLocaleString("en-KE");
+const sound = {
+  enabled: true,
+  ctx: null,
+
+  play(type) {
+    if (!this.enabled) return;
+
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+
+      if (!this.ctx) this.ctx = new AC();
+      if (this.ctx.state === "suspended") this.ctx.resume();
+
+      const sounds = {
+        flight: [440, 0.08, "triangle"],
+        cashout: [880, 0.22, "sine"],
+        crash: [130, 0.45, "sawtooth"],
+        countdown: [660, 0.12, "sine"]
+      };
+
+      const cfg = sounds[type];
+      if (!cfg) return;
+
+      const oscillator = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      oscillator.type = cfg[2];
+      oscillator.frequency.value = cfg[0];
+      gain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.1, this.ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        this.ctx.currentTime + cfg[1]
+      );
+
+      oscillator.connect(gain);
+      gain.connect(this.ctx.destination);
+      oscillator.start();
+      oscillator.stop(this.ctx.currentTime + cfg[1]);
+    } catch (error) {
+      console.warn("Sound unavailable:", error);
+    }
+  }
+};
+
+function money(amount) {
+  return "KSh " + Math.floor(amount).toLocaleString("en-KE");
+}
+
+function save() {
+  try {
+    localStorage.setItem("skycrash-demo", JSON.stringify({ balance, history }));
+  } catch (error) {}
 }
 
 function updateBalance() {
-$("balance").textContent = formatKSh(balance);
+  $("balance").textContent = money(balance);
 }
+
 function resetCoins() {
-balance = 50000;
-updateBalance();
-saveGame();
-
-$("result").textContent =
-"✅ Virtual coins reset to 50,000!";
-
-$("result").style.color = "var(--green)";
-}
-  const skySound = {
-enabled: true,
-context: null,
-
-play(type) {
-if (!this.enabled) return;
-
-try {
-  const AudioContextClass =
-    window.AudioContext || window.webkitAudioContext;
-
-  if (!AudioContextClass) return;
-
-  if (!this.context) {
-    this.context = new AudioContextClass();
-  }
-
-  const ctx = this.context;
-
-  if (ctx.state === "suspended") {
-    ctx.resume();
-  }
-
-  const sounds = {
-    countdown: { frequency: 660, duration: 0.12, wave: "sine" },
-    flight:    { frequency: 440, duration: 0.08, wave: "triangle" },
-    cashout:   { frequency: 880, duration: 0.22, wave: "sine" },
-    crash:     { frequency: 130, duration: 0.45, wave: "sawtooth" }
-  };
-
-  const sound = sounds[type];
-  if (!sound) return;
-
-  const oscillator = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  oscillator.type = sound.wave;
-  oscillator.frequency.setValueAtTime(
-    sound.frequency,
-    ctx.currentTime
-  );
-
-  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(
-    0.12,
-    ctx.currentTime + 0.02
-  );
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    ctx.currentTime + sound.duration
-  );
-
-  oscillator.connect(gain);
-  gain.connect(ctx.destination);
-
-  oscillator.start();
-  oscillator.stop(ctx.currentTime + sound.duration);
-} catch (error) {
-  console.warn("SkyCrash sound unavailable:", error);
-}
-
-}
-};
-
-const soundToggle = document.getElementById("sound-toggle");
-
-if (soundToggle) {
-soundToggle.addEventListener("click", () => {
-skySound.enabled = !skySound.enabled;
-
-soundToggle.textContent = skySound.enabled
-  ? "🔊 Sound ON"
-  : "🔇 Sound OFF";
-
-soundToggle.setAttribute(
-  "aria-pressed",
-  String(skySound.enabled)
-);
-
-if (skySound.enabled) {
-  skySound.play("countdown");
-}
-
-});
-}
-function saveGame() {
-  try {
-    localStorage.setItem(
-      "skycrash-demo",
-      JSON.stringify({ balance, history })
-    );
-  } catch (error) {}
-}
-
-
-function loadGame() {
-  // Refill the demo balance to 50,000 on every page refresh.
   balance = 50000;
-
-  // Keep the existing game history if it was saved.
-  try {
-    const data = JSON.parse(
-      localStorage.getItem("skycrash-demo") || "{}"
-    );
-
-    if (Array.isArray(data.history)) {
-      history = data.history
-        .filter(Number.isFinite)
-        .slice(0, 12);
-    }
-  } catch (error) {}
-
   updateBalance();
-  renderHistory();
-  saveGame();
+  save();
+  $("result").textContent = "Virtual balance reset to KSh 50,000.";
 }
-  
+
 function renderHistory() {
   const box = $("history");
   box.innerHTML = "";
 
-  if (history.length === 0) {
-    const empty = document.createElement("span");
-    empty.className = "note";
-    empty.textContent = "No completed rounds yet.";
-    box.appendChild(empty);
+  if (!history.length) {
+    box.innerHTML = '<span class="note">No completed rounds yet.</span>';
     return;
   }
 
-  history.forEach(value => {
+  history.slice(0, 12).forEach(value => {
     const item = document.createElement("span");
-    item.className =
-      "history-item " + (value >= 2 ? "high" : "low");
-    item.textContent = value.toFixed(2) + "x";
+    item.className = "history-item " + (value >= 2 ? "high" : "low");
+    item.textContent = Number(value).toFixed(2) + "x";
     box.appendChild(item);
   });
 }
 
-function updateBetDisplay() {
-  const amount = Number($("bet").value);
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem("skycrash-demo") || "{}");
+    if (Array.isArray(data.history)) {
+      history = data.history.filter(Number.isFinite).slice(0, 12);
+    }
+  } catch (error) {}
 
-  $("betDisplay").textContent =
-    Number.isFinite(amount) && amount >= 1
-      ? amount.toLocaleString() + " coins"
-      : "Enter amount";
+  balance = 50000;
+  updateBalance();
+  renderHistory();
+  save();
 }
 
-function updateBet2Display() {
-  const amount = Number($("bet2").value);
+function updateDisplays() {
+  const amount1 = Number($("bet").value);
+  const amount2 = Number($("bet2").value);
+
+  $("betDisplay").textContent = bet1Placed
+    ? "Refund " + betAmount.toLocaleString() + " coins"
+    : (Number.isFinite(amount1) && amount1 > 0
+        ? amount1.toLocaleString() + " coins"
+        : "Enter amount");
+
+  $("play2Display").textContent = bet2Placed
+    ? "Refund " + bet2Amount.toLocaleString() + " coins"
+    : (Number.isFinite(amount2) && amount2 > 0
+        ? amount2.toLocaleString() + " coins"
+        : "Enter amount");
 
   $("bet2Display").textContent =
-    Number.isFinite(amount) && amount >= 1
-      ? amount.toLocaleString() + " coins"
-      : "Enter amount";
-
-  $("play2Display").textContent =
-    Number.isFinite(amount) && amount >= 1
-      ? amount.toLocaleString() + " coins"
+    Number.isFinite(amount2) && amount2 > 0
+      ? amount2.toLocaleString() + " coins"
       : "Enter amount";
 
   $("bet2Payout").textContent =
-    bet2Placed && !cashedOut2
-      ? Math.floor(bet2Amount * multiplier).toLocaleString() +
-        " coins"
-      : "0 coins";
+    bet2Placed && !cashedOut2 ? money(bet2Amount * multiplier) : money(0);
 }
 
-
 function setControls() {
-  const running = phase === "running";
-  const waiting = phase === "waiting";
   const ready = phase === "ready";
+  const running = phase === "running";
 
-  // PANEL 1
-  $("play").disabled = !ready;
+  $("play").disabled = !(ready || (running && !bet1Placed));
+  $("play2").disabled = !(ready || (running && !bet2Placed));
 
-$("play").className =
-  bet1Placed && ready ? "red-button" : "green-button";
-
-$("playLabel").textContent =
-  bet1Placed && ready ? "CANCEL BET" : "BET";
-
-$("betDisplay").textContent =
-  bet1Placed && ready
-    ? "Refund " + betAmount.toLocaleString() + " coins"
-    : (Number($("bet").value) || 0).toLocaleString() + " coins";
   $("bet").disabled = !ready || bet1Placed;
   $("decreaseBet").disabled = !ready || bet1Placed;
   $("increaseBet").disabled = !ready || bet1Placed;
 
-  $("cashout").hidden =
-    !running || !bet1Placed || cashedOut;
-  $("cashout").style.display =
-    running && bet1Placed && !cashedOut ? "flex" : "none";
-  $("cashout").disabled =
-    !running || !bet1Placed || cashedOut;
-
-  if (cashedOut) {
-    $("cashoutLabel").textContent = "CASHED OUT";
-  } else if (running && bet1Placed) {
-    $("cashoutLabel").textContent =
-      "CASH OUT · " + multiplier.toFixed(2) + "x";
-  } else if (waiting) {
-    $("cashoutLabel").textContent = "Round ended";
-  } else {
-    $("cashoutLabel").textContent = "CASH OUT";
-    $("cashoutValue").textContent = "0 coins";
-  }
-
-  // PANEL 2
-  $("play2").disabled = !ready;
-
-$("play2").className =
-  bet2Placed && ready ? "red-button" : "green-button";
-
-$("play2").querySelector("span").textContent =
-  bet2Placed && ready ? "CANCEL BET 2" : "BET 2";
-
-$("play2Display").textContent =
-  bet2Placed && ready
-    ? "Refund " + bet2Amount.toLocaleString() + " coins"
-    : (Number($("bet2").value) || 0).toLocaleString() + " coins";
   $("bet2").disabled = !ready || bet2Placed;
   $("decreaseBet2").disabled = !ready || bet2Placed;
   $("increaseBet2").disabled = !ready || bet2Placed;
 
-  $("cashout2").hidden =
-    !running || !bet2Placed || cashedOut2;
-  $("cashout2").style.display =
-    running && bet2Placed && !cashedOut2 ? "flex" : "none";
-  $("cashout2").disabled =
-    !running || !bet2Placed || cashedOut2;
+  $("playLabel").textContent =
+    bet1Placed ? (ready ? "CANCEL BET" : "BET PLACED") : "BET";
+  $("play").className = bet1Placed ? "red-button" : "green-button";
 
-  if (cashedOut2) {
-    $("cashoutLabel2").textContent = "CASHED OUT 2";
-  } else if (running && bet2Placed) {
-    $("cashoutLabel2").textContent =
-      "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
-  } else {
-    $("cashoutLabel2").textContent = "CASH OUT 2";
-  }
+  $("play2").querySelector("span").textContent =
+    bet2Placed ? (ready ? "CANCEL BET 2" : "BET 2 PLACED") : "BET 2";
+  $("play2").className = bet2Placed ? "red-button" : "green-button";
 
-  // Auto settings belong to Panel 1.
+  $("cashout").hidden = !(running && bet1Placed && !cashedOut);
+  $("cashout").disabled = !(running && bet1Placed && !cashedOut);
+
+  $("cashout2").hidden = !(running && bet2Placed && !cashedOut2);
+  $("cashout2").disabled = !(running && bet2Placed && !cashedOut2);
+
   $("autoTarget").disabled = !ready;
-  $("autoBet").disabled = waiting;
-  $("autoCash").disabled = waiting;
+  $("autoBet").disabled = phase === "waiting";
+  $("autoCash").disabled = phase === "waiting";
 
-  updateBet2Display();
+  updateDisplays();
 }
-  
 
 function resetFlight() {
   $("plane").textContent = "✈️";
@@ -1242,679 +753,130 @@ function resetFlight() {
   $("multiplier").style.color = "white";
   $("multiplier").textContent = "1.00x";
 }
-  function cancelBet() {
-  if (phase !== "ready" || !bet1Placed) return;
 
-  balance += betAmount;
-  betAmount = 0;
-  bet1Placed = false;
-  cashedOut = false;
+async function request(path) {
+  const response = await fetch(API + path, { cache: "no-store" });
 
-  updateBalance();
-  saveGame();
-
-  $("result").textContent = "Bet 1 cancelled. Your coins have been refunded.";
-  $("result").style.color = "var(--green)";
-
-  if (!bet2Placed && bettingCountdownTimer !== null) {
-    clearInterval(bettingCountdownTimer);
-    bettingCountdownTimer = null;
-    $("status").textContent = "Waiting for bets";
+  if (!response.ok) {
+    throw new Error("Server request failed (" + response.status + ").");
   }
 
-  setControls();
+  return response.json();
+}
+
+async function getStatus() {
+  return request("/api/game-status");
+}
+
+async function getMultiplier() {
+  return request("/api/game-multiplier");
+}
+
+function placeBet(which) {
+  if (phase !== "ready") {
+    $("result").textContent = "Wait for the next betting window.";
+    return;
   }
 
-function placeBet() {
-  if (phase !== "ready" || bet1Placed) return;
-
-  const amount = Number($("bet").value);
+  const isFirst = which === 1;
+  const input = $(isFirst ? "bet" : "bet2");
+  const amount = Number(input.value);
 
   if (!Number.isInteger(amount) || amount < 1) {
-    $("result").textContent =
-      "Enter a whole-number bet of at least 1 coin.";
+    $("result").textContent = "Enter a whole-number stake of at least 1 coin.";
     return;
   }
 
   if (amount > balance) {
-$("result").textContent =
-"Not enough virtual money (KSh) for Bet 1.";
-return;
-  }
-
-  betAmount = amount;
-  bet1Placed = true;
-  cashedOut = false;
-
-  balance -= amount;
-  updateBalance();
-  saveGame();
-
-  $("result").textContent =
-    "Bet 1 placed! Place Bet 2 before takeoff.";
-
-  setControls();
-  startBettingCountdown();
-}
-
-function placeBet2() {
-  if (phase !== "ready" || bet2Placed) return;
-
-  const amount = Number($("bet2").value);
-
-  if (!Number.isInteger(amount) || amount < 1) {
-    $("bet2Status").textContent =
-      "Enter a whole-number Bet 2 amount.";
+    $("result").textContent = "Not enough virtual coins.";
     return;
   }
 
-  if (amount > balance) {
-    $("bet2Status").textContent =
-      "Not enough virtual coins for Bet 2.";
-    return;
-  }
-
-  bet2Amount = amount;
-  bet2Placed = true;
-  cashedOut2 = false;
+  if (isFirst ? bet1Placed : bet2Placed) return;
 
   balance -= amount;
-  updateBalance();
-  saveGame();
 
-$("bet2Status").textContent =
-"Bet 2 placed · " +
-formatKSh(amount);
-
-  setControls();
-  startBettingCountdown();
+  if (isFirst) {
+    betAmount = amount;
+    bet1Placed = true;
+    cashedOut = false;
+  } else {
+    bet2Amount = amount;
+    bet2Placed = true;
+    cashedOut2 = false;
+    $("bet2Status").textContent = "Bet 2 placed · " + money(amount);
   }
-  function cancelBet2() {
-  if (phase !== "ready" || !bet2Placed) return;
-
-  balance += bet2Amount;
-  bet2Amount = 0;
-  bet2Placed = false;
-  cashedOut2 = false;
 
   updateBalance();
-  saveGame();
-
-  $("bet2Status").textContent =
-    "Bet 2 cancelled. Your coins have been refunded.";
-
-  $("bet2Payout").textContent = "0 coins";
-
-  $("result").textContent =
-    "Bet 2 cancelled. Your coins have been refunded.";
-
-  $("result").style.color = "var(--green)";
-
-  if (!bet1Placed && bettingCountdownTimer !== null) {
-    clearInterval(bettingCountdownTimer);
-    bettingCountdownTimer = null;
-    $("status").textContent = "Waiting for bets";
-  }
-
+  save();
+  $("result").textContent = "Virtual bet placed.";
   setControls();
-  }
-  
-const SKYCRASH_API = "https://skycrash-predictor.onrender.com";
-
-async function getServerGameStatus() {
-  const response = await fetch(
-    `${SKYCRASH_API}/api/game-status`,
-    { cache: "no-store" }
-  );
-
-  if (!response.ok) {
-    throw new Error("Could not connect to the SkyCrash server.");
-  }
-
-  return await response.json();
 }
 
-async function getServerGameMultiplier() {
-  const response = await fetch(
-    `${SKYCRASH_API}/api/game-multiplier`,
-    { cache: "no-store" }
-  );
-
-  if (!response.ok) {
-    throw new Error("Could not retrieve the server multiplier.");
-  }
-
-  return await response.json();
-}
-
-async function startServerGameRound() {
-  const response = await fetch(
-    `${SKYCRASH_API}/api/game-start`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({})
-    }
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      data.error || "Could not start the server round."
-    );
-  }
-
-  return data;
-}
-
-  async function startRound() {
-  async function startRound() {
-  if (phase === "running") return;
-
-  $("result").textContent = "Synchronizing with the game...";
-  $("status").textContent = "⏳ Connecting...";
-  setControls();
-
-  try {
-    const data = await getServerGameStatus();
-
-    if (!data || !data.roundId) {
-      throw new Error("No round is available yet.");
-    }
-
-    if (data.status !== "running") {
-      $("status").textContent = "Waiting for automatic takeoff...";
-      return;
-    }
-
-    serverRoundId = data.roundId;
-    multiplier = 1;
-    crashAt = 0;
-    phase = "running";
-
-    resetFlight();
-
-    $("status").textContent = "🚀 Flying...";
-    $("result").textContent = "Round in progress.";
-
-    skySound.play("flight");
-    setControls();
-
-    if (animationFrame !== null) {
-      cancelAnimationFrame(animationFrame);
-    }
-
-    animationFrame = requestAnimationFrame(tick);
-
-  } catch (error) {
-    $("status").textContent = "⚠️ Reconnecting...";
-    $("result").textContent = error.message;
-  }
-  }
-
-
-function startBettingCountdown() {
-  // Start only one countdown per round.
-  if (bettingCountdownTimer !== null) return;
+function cancelBet(which) {
   if (phase !== "ready") return;
 
-  bettingCountdown = 10;
-
-  $("status").textContent =
-    "⏳ Takeoff in " + bettingCountdown + " seconds";
-
-  $("result").textContent =
-    "Place your bets on either or both panels!";
-
-  bettingCountdownTimer = setInterval(() => {
-    if (phase !== "ready") {
-      clearInterval(bettingCountdownTimer);
-      bettingCountdownTimer = null;
-      return;
-    }
-
-    bettingCountdown--;
-
-    if (bettingCountdown > 0) {
-$("status").textContent =
-"⏳ Takeoff in " + bettingCountdown + " seconds";
-
-skySound.play("countdown");
-    } else {
-      clearInterval(bettingCountdownTimer);
-      bettingCountdownTimer = null;
-
-      if (bet1Placed || bet2Placed) {
-        $("status").textContent = "🚀 Taking off!";
-        startRound();
-      } else {
-        $("status").textContent = "Waiting for bets";
-      }
-    }
-  }, 1000);
+  if (which === 1 && bet1Placed) {
+    balance += betAmount;
+    betAmount = 0;
+    bet1Placed = false;
+    cashedOut = false;
   }
-  
-    async function tick(now) {
+
+  if (which === 2 && bet2Placed) {
+    balance += bet2Amount;
+    bet2Amount = 0;
+    bet2Placed = false;
+    cashedOut2 = false;
+    $("bet2Status").textContent = "Bet 2 cancelled.";
+  }
+
+  updateBalance();
+  save();
+  setControls();
+}
+
+function cashOut(which) {
+  const isFirst = which === 1;
+
   if (phase !== "running") return;
+  if (isFirst && (!bet1Placed || cashedOut)) return;
+  if (!isFirst && (!bet2Placed || cashedOut2)) return;
 
-  try {
-    const data = await getServerGameMultiplier();
+  const amount = isFirst ? betAmount : bet2Amount;
+  const payout = Math.floor(amount * multiplier);
 
-    if (phase !== "running") return;
-
-    // Make sure we are following the correct server round.
-    if (
-      serverRoundId !== null &&
-      data.roundId !== serverRoundId
-    ) {
-      $("status").textContent = "Waiting for round sync...";
-      animationFrame = requestAnimationFrame(tick);
-      return;
-    }
-
-    // Handle a server-reported crash.
-    if (data.status === "crashed") {
-      if (typeof data.crashAt === "number") {
-        crashAt = data.crashAt;
-      }
-
-      if (crashAt > 0) {
-        multiplier = crashAt;
-      }
-
-      $("multiplier").textContent =
-        multiplier.toFixed(2) + "x";
-
-      skySound.play("crash");
-      finishCrash();
-      return;
-    }
-
-    // Wait for the server to provide a valid multiplier.
-    if (
-      data.status !== "running" ||
-      data.multiplier == null ||
-      !Number.isFinite(Number(data.multiplier))
-    ) {
-      animationFrame = requestAnimationFrame(tick);
-      return;
-    }
-
-    multiplier = Number(data.multiplier);
-
-    $("multiplier").textContent =
-      multiplier.toFixed(2) + "x";
-
-    // Update Panel 1.
-    if (bet1Placed && !cashedOut) {
-      $("cashoutLabel").textContent =
-        "CASH OUT · " + multiplier.toFixed(2) + "x";
-
-      $("cashoutValue").textContent =
-        formatKSh(betAmount * multiplier);
-    }
-
-    // Update Panel 2.
-    if (bet2Placed && !cashedOut2) {
-      $("cashoutLabel2").textContent =
-        "CASH OUT 2 · " + multiplier.toFixed(2) + "x";
-
-      $("cashoutValue2").textContent =
-        formatKSh(bet2Amount * multiplier);
-
-      $("bet2Payout").textContent =
-        formatKSh(bet2Amount * multiplier);
-    }
-
-    // Animate the plane.
-    const progress = Math.min(1, (multiplier - 1) / 8);
-    const left = 8 + progress * 77;
-    const bottom = 20 + progress * 145;
-
-    $("plane").style.left = left + "%";
-    $("plane").style.bottom = bottom + "px";
-
-    $("trail").style.width =
-      Math.max(0, left - 8) + "%";
-
-    // Auto cash-out for Panel 1.
-    if (
-      $("autoCash").checked &&
-      bet1Placed &&
-      !cashedOut &&
-      multiplier >= Number($("autoTarget").value)
-    ) {
-      cashOut();
-    }
-
-    animationFrame = requestAnimationFrame(tick);
-
-  } catch (error) {
-    console.error("SkyCrash server polling error:", error);
-
-    $("status").textContent = "⚠️ Reconnecting to server...";
-
-    setTimeout(() => {
-      if (phase === "running") {
-        animationFrame = requestAnimationFrame(tick);
-      }
-    }, 1000);
-  }
-  }
-
-function cashOut() {
-  if (
-    phase !== "running" ||
-    !bet1Placed ||
-    cashedOut
-  ) return;
-
-  cashedOut = true;
-  skySound.play("cashout");
-  
-  const payout = Math.floor(betAmount * multiplier);
-
-  $("win-title").textContent = "Bet 1 cashed out!";
-  $("win-multiplier").textContent =
-    multiplier.toFixed(2) + "x";
-  $("win-payout").textContent =
-  formatKSh(payout);
-
-  $("win-notification").hidden = false;
-
-  if (winTimer1 !== null) clearTimeout(winTimer1);
-
-  winTimer1 = setTimeout(() => {
-    $("win-notification").hidden = true;
-    winTimer1 = null;
-  }, 1000);
+  if (isFirst) cashedOut = true;
+  else cashedOut2 = true;
 
   balance += payout;
   updateBalance();
-  saveGame();
+  save();
+  sound.play("cashout");
 
-  $("cashoutLabel").textContent = "CASHED OUT";
-  $("cashoutValue").textContent =
-    formatKSh(payout)
+  const suffix = isFirst ? "" : "-2";
+  $("win-title" + suffix).textContent =
+    isFirst ? "Bet 1 cashed out!" : "Bet 2 cashed out!";
+  $("win-multiplier" + suffix).textContent = multiplier.toFixed(2) + "x";
+  $("win-payout" + suffix).textContent = money(payout);
 
-  $("result").textContent =
-  "Bet 1 cashed out at " + multiplier.toFixed(2) +
-  "x. Payout: " + formatKSh(payout) + ".";
+  const notice = $("win-notification" + suffix);
+  notice.hidden = false;
 
-  $("result").style.color = "var(--green)";
-  $("status").textContent = "✓ BET 1 CASHED OUT";
+  const oldTimer = isFirst ? winTimer1 : winTimer2;
+  if (oldTimer) clearTimeout(oldTimer);
 
-  setControls();
-}
+  const timer = setTimeout(() => {
+    notice.hidden = true;
+  }, 2200);
 
-function cashOut2() {
-  if (
-    phase !== "running" ||
-    !bet2Placed ||
-    cashedOut2
-  ) return;
-
-  cashedOut2 = true;
-  skySound.play("cashout");
-  
-  const payout = Math.floor(bet2Amount * multiplier);
-
-  $("win-title-2").textContent = "Bet 2 cashed out!";
-  $("win-multiplier-2").textContent =
-    multiplier.toFixed(2) + "x";
-  $("win-payout-2").textContent =
-  formatKSh(payout);
-  $("win-notification-2").hidden = false;
-
-  if (winTimer2 !== null) clearTimeout(winTimer2);
-
-  winTimer2 = setTimeout(() => {
-    $("win-notification-2").hidden = true;
-    winTimer2 = null;
-  }, 1000);
-
-  balance += payout;
-  updateBalance();
-  saveGame();
-
-  $("cashoutLabel2").textContent = "CASHED OUT 2";
-  $("cashoutValue2").textContent =
-  formatKSh(payout);
-
-  $("bet2Payout").textContent =
-  formatKSh(payout);
-
-  $("bet2Status").textContent =
-    "Cashed out at " + multiplier.toFixed(2) +
-    "x · Won " + payout.toLocaleString() + " coins";
+  if (isFirst) winTimer1 = timer;
+  else winTimer2 = timer;
 
   $("result").textContent =
-    "Bet 2 cashed out at " + multiplier.toFixed(2) +
-    "x. Payout: " + payout.toLocaleString() + " coins.";
+    (isFirst ? "Bet 1" : "Bet 2") +
+    " cashed out at " + multiplier.toFixed(2) +
+    "x. Payout: " + money(payout) + ".";
 
-  $("result").style.color = "var(--green)";
-
-  setControls();
-}
-
-function finishCrash() {
-  phase = "waiting";
-
-  if (animationFrame !== null) {
-    cancelAnimationFrame(animationFrame);
-    animationFrame = null;
-  }
-
-  $("multiplier").style.color = "var(--red)";
-  $("plane").textContent = "💥";
-  $("status").textContent = "CRASH!";
-
-  $("trail").style.background = "var(--red)";
-  $("trail").style.boxShadow = "0 0 12px var(--red)";
-
-  history.unshift(crashAt);
-  history = history.slice(0, 12);
-  renderHistory();
-
-  const losses = [];
-
-  if (bet1Placed && !cashedOut) {
-    losses.push("Bet 1 lost " + betAmount + " coins");
-  }
-
-  if (bet2Placed && !cashedOut2) {
-    losses.push("Bet 2 lost " + bet2Amount + " coins");
-    $("bet2Status").textContent =
-      "Crashed! Bet 2 lost " + bet2Amount + " coins.";
-  }
-
-  if (losses.length > 0) {
-    $("result").textContent =
-      "Crashed at " + crashAt.toFixed(2) + "x. " +
-      losses.join(". ") + ".";
-    $("result").style.color = "var(--red)";
-  } else {
-    $("result").textContent =
-      "Round ended at " + crashAt.toFixed(2) + "x.";
-  }
-
-  saveGame();
-  setControls();
-
-  nextRoundTimer = setTimeout(async () => {
-  nextRoundTimer = setTimeout(async () => {
-  nextRoundTimer = null;
-
-  $("status").textContent = "Waiting for next round...";
-  $("result").textContent = "The next round will start automatically.";
-
-  const waitForNextRound = async () => {
-    if (phase !== "waiting") return;
-
-    try {
-      const data = await getServerGameStatus();
-
-      if (data && data.roundId && data.status === "running") {
-        serverRoundId = data.roundId;
-
-        // Reset both betting panels for the new round.
-        bet1Placed = false;
-        cashedOut = false;
-        betAmount = 0;
-
-        bet2Placed = false;
-        cashedOut2 = false;
-        bet2Amount = 0;
-
-        phase = "ready";
-
-        $("bet2Status").textContent = "Ready for takeoff";
-        $("bet2Payout").textContent = "0 coins";
-
-        setControls();
-
-        // Join the round already running on the server.
-        await startRound();
-        return;
-      }
-    } catch (error) {
-      console.warn("Waiting for the next round:", error);
-    }
-
-    nextRoundTimer = setTimeout(waitForNextRound, 500);
-  };
-
-  await waitForNextRound();
-}, 2000);
-// PANEL 1 AMOUNT CONTROLS
-$("decreaseBet").onclick = () => {
-  $("bet").value = Math.max(
-    1, (Number($("bet").value) || 1) - 10
-  );
-  updateBetDisplay();
-};
-
-$("increaseBet").onclick = () => {
-  $("bet").value = Math.max(
-    1, (Number($("bet").value) || 0) + 10
-  );
-  updateBetDisplay();
-};
-
-document.querySelectorAll("[data-bet]").forEach(button => {
-  button.onclick = () => {
-    $("bet").value = button.dataset.bet;
-    updateBetDisplay();
-  };
-});
-
-$("bet").oninput = updateBetDisplay;
-
-// PANEL 2 AMOUNT CONTROLS
-$("decreaseBet2").onclick = () => {
-  $("bet2").value = Math.max(
-    1, (Number($("bet2").value) || 1) - 10
-  );
-  updateBet2Display();
-};
-
-$("increaseBet2").onclick = () => {
-  $("bet2").value = Math.max(
-    1, (Number($("bet2").value) || 0) + 10
-  );
-  updateBet2Display();
-};
-
-document.querySelectorAll("[data-bet2]").forEach(button => {
-  button.onclick = () => {
-    $("bet2").value = button.dataset.bet2;
-    updateBet2Display();
-  };
-});
-
-$("bet2").oninput = updateBet2Display;
-
-// BET AND AUTO TABS
-$("manualTab").onclick = () => {
-  $("manualTab").classList.add("active");
-  $("autoTab").classList.remove("active");
-  $("autoSettings").hidden = true;
-};
-
-$("autoTab").onclick = () => {
-  $("autoTab").classList.add("active");
-  $("manualTab").classList.remove("active");
-  $("autoSettings").hidden = false;
-};
-
-// GAME BUTTONS
-$("play").onclick = () => {
-  if (phase === "ready" && bet1Placed) {
-    cancelBet();
-  } else {
-    placeBet();
-  }
-};
-
-$("cashout").onclick = cashOut;
-
-$("play2").onclick = () => {
-  if (phase === "ready" && bet2Placed) {
-    cancelBet2();
-  } else {
-    placeBet2();
-  }
-};
-
-$("cashout2").onclick = cashOut2;
-
-// RESET VIRTUAL MONEY
-$("resetCoinsButton").onclick = resetCoins;
-
-// AUTO BET: Panel 1 only
-$("autoBet").onchange = () => {
-  setControls();
-
-  if ($("autoBet").checked && phase === "ready") {
-    placeBet();
-  }
-};
-// AUTO CASH-OUT: Panel 1 only
-$("autoCash").onchange = () => {
-  if (!$("autoCash").checked) return;
-
-  const target = Number($("autoTarget").value);
-
-  if (!Number.isFinite(target) || target < 1.01) {
-    $("autoCash").checked = false;
-    $("result").textContent =
-      "Set auto cash-out to at least 1.01x.";
-  }
-};
-
-updateBetDisplay();
-updateBet2Display();
-
-window.addEventListener("pagehide", () => {
-  if (animationFrame !== null) {
-    cancelAnimationFrame(animationFrame);
-  }
-
-  if (nextRoundTimer !== null) {
-    clearTimeout(nextRoundTimer);
-  }
-
-  if (winTimer1 !== null) clearTimeout(winTimer1);
-  if (winTimer2 !== null) clearTimeout(winTimer2);
-});
-
-// Load saved virtual balance and history.
-loadGame();
-resetFlight();
-setControls();
-  </script>
-</body>
-</html>
+  if (!isFirst) {
+    $("bet2Status").textContent
