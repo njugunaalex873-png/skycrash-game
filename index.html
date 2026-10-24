@@ -858,6 +858,7 @@ function setControls() {
 function resetFlight() {
   $("plane").textContent = "✈️";
   $("plane").style.left = "8%";
+  $("plane").style.display = "block";
   $("plane").style.bottom = "20px";
   $("plane").style.transform = "rotate(0deg)";
   $("trail").style.transform = "none";
@@ -1340,6 +1341,7 @@ if (statusData.status === "running") {
     }
 
     phase = "ready";
+    $("plane").style.display = "none";
     updateCountdown(statusData.createdAt);
     $("status").textContent =
       "Round waiting to start. Place your virtual bet.";
