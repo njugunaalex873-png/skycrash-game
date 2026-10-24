@@ -1037,6 +1037,9 @@ function finishCrash(value, roundId) {
   $("multiplier").style.color = "var(--red)";
   $("plane").textContent = "✈️";
   $("status").textContent = "CRASH!";
+  $("status").style.fontWeight = "900";
+  $("status").style.fontSize = "24px";
+  $("status").style.color = "var(--red)";
 
   $("trail").style.background = "var(--green)";
   $("trail").style.boxShadow = "none";
@@ -1250,6 +1253,9 @@ if (statusData.status === "running") {
         $("plane").style.display = "block";
         $("trail").style.display = "block";
         $("status").textContent = "🚀 Flying...";
+        $("status").style.fontWeight = "normal";
+        $("status").style.fontSize = "14px";
+        $("status").style.color = "var(--muted)";
         $("result").style.color = "var(--green)";
         $("result").textContent = "Round in progress.";
 
