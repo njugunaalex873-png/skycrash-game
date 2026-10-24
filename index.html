@@ -1173,9 +1173,12 @@ if (statusData.status === "running") {
     serverRoundId = statusData.roundId;
     phase = "running";
     multiplier = 1;
+    displayedMultiplier = 1;
     crashAt = 0;
+
+     $("multiplier").textContent = "1.00x";
     
-        resetFlight();
+      resetFlight();
 
         $("status").textContent = "🚀 Flying...";
         $("result").style.color = "var(--green)";
@@ -1197,8 +1200,7 @@ if (statusData.status === "running") {
       ) {
         multiplier = Number(data.multiplier);
 
-        $("multiplier").textContent =
-          multiplier.toFixed(2) + "x";
+        smoothMultiplier(multiplier);
 
         if (bet1Placed && !cashedOut) {
           $("cashoutValue").textContent =
