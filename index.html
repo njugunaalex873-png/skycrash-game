@@ -1055,6 +1055,19 @@ function animateFlight() {
   $("plane").style.bottom = bottom + "px";
   $("trail").style.width = Math.max(0, left - 8) + "%";
 }
+  
+window.addEventListener("error", function(event) {
+  $("result").textContent =
+    "JavaScript error: " + event.message;
+  console.error("SkyCrash JavaScript error:", event.error);
+});
+
+window.addEventListener("unhandledrejection", function(event) {
+  $("result").textContent =
+    "Async error: " + event.reason;
+  console.error("SkyCrash async error:", event.reason);
+});
+  
 
 async function syncRound() {
   if (syncBusy) return;
